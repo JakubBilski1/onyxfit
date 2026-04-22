@@ -451,7 +451,7 @@ function Hero() {
               <span className="hidden h-1 w-1 rounded-full bg-zinc-700 sm:inline-block" />
               <span className="flex items-center gap-2 text-orange-400/90">
                 <Crown className="h-3.5 w-3.5" />
-                62 / 100 founding spots claimed
+                0 / 100 founding spots claimed
               </span>
             </div>
           </div>
@@ -965,12 +965,12 @@ function Founding() {
               <div className="mt-8 space-y-3">
                 <div className="flex items-center justify-between text-xs uppercase tracking-widest text-zinc-500">
                   <span>Founding spots claimed</span>
-                  <span className="font-semibold text-orange-400">62 / 100</span>
+                  <span className="font-semibold text-orange-400">0 / 100</span>
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-800">
                   <div
                     className="h-full rounded-full bg-gradient-to-r from-orange-600 to-orange-400"
-                    style={{ width: "62%" }}
+                    style={{ width: "0%" }}
                   />
                 </div>
                 <p className="text-xs text-zinc-500">
