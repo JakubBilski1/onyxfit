@@ -3,12 +3,23 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --grid-line: 9 9 11; /* zinc-950 */
+    color-scheme: light;
+  }
+
+  .dark {
+    --grid-line: 255 255 255;
+    color-scheme: dark;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
     font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    transition: background-color 300ms ease, color 300ms ease;
   }
 
   ::selection {
@@ -20,5 +31,19 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgb(var(--grid-line) / 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--grid-line) / 0.04) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  .bg-grid-dense {
+    background-image:
+      linear-gradient(to right, rgb(var(--grid-line) / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--grid-line) / 0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
 }
