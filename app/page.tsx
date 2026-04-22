@@ -1,17 +1,34 @@
 "use client";
 
 import {
+  AlertTriangle,
   ArrowRight,
+  Award,
+  BrainCircuit,
   Calendar,
+  Camera,
   CheckCircle2,
+  ChevronDown,
+  Clock,
   CreditCard,
+  Crown,
   Dumbbell,
   Flame,
+  Globe,
   Hammer,
+  Layers,
+  Palette,
+  Rocket,
+  Salad,
   ShieldCheck,
   Sparkles,
+  Target,
+  TrendingUp,
   Users,
   Video,
+  Watch,
+  X,
+  Zap,
 } from "lucide-react";
 import {
   ButtonHTMLAttributes,
@@ -152,6 +169,154 @@ const features = [
   },
 ] as const;
 
+const stats = [
+  { icon: Clock, value: "12h", label: "Saved per week, per coach" },
+  { icon: Layers, value: "7 apps", label: "Replaced by one workspace" },
+  { icon: Zap, value: "< 5 min", label: "To build a full program" },
+  { icon: Crown, value: "100", label: "Founding spots. Locked forever." },
+] as const;
+
+const problems = [
+  {
+    icon: AlertTriangle,
+    title: "Spreadsheets that break under weight.",
+    description:
+      "A single typo, a broken formula, a lost tab — and a week of programming evaporates. Your craft deserves better than Google Sheets.",
+  },
+  {
+    icon: AlertTriangle,
+    title: "Six apps. Zero cohesion.",
+    description:
+      "Programming in one tool. Messaging in another. Payments in a third. Form checks buried in DMs. Your clients feel the seams — and so do you.",
+  },
+  {
+    icon: AlertTriangle,
+    title: "Time stolen from the work that matters.",
+    description:
+      "Admin, invoicing, rebooking, chasing payments. Every hour in a spreadsheet is an hour not spent coaching. That math doesn't compound in your favor.",
+  },
+] as const;
+
+const steps = [
+  {
+    icon: Target,
+    step: "01",
+    title: "Onboard in minutes.",
+    description:
+      "Import your clients, build your exercise library, and drop in your first programs. We'll migrate your spreadsheets for you — no data left behind.",
+  },
+  {
+    icon: Layers,
+    step: "02",
+    title: "Build once. Reuse forever.",
+    description:
+      "Design your signature methodology as reusable templates. Duplicate, adjust, assign. What used to take an afternoon now takes a coffee break.",
+  },
+  {
+    icon: Rocket,
+    step: "03",
+    title: "Scale without breaking.",
+    description:
+      "Take on more clients without taking on more chaos. OnyxFit handles the admin, billing, and check-ins — you stay focused on the coaching.",
+  },
+] as const;
+
+const secondaryFeatures = [
+  {
+    icon: Salad,
+    title: "Nutrition Coaching",
+    description:
+      "Macro targets, meal plans, and a searchable food database. Log meals from the same app — no more MyFitnessPal screenshots.",
+  },
+  {
+    icon: Camera,
+    title: "Progress Photos & Biometrics",
+    description:
+      "Side-by-side photo comparisons, measurements, and body composition tracking. Show the transformation in numbers and in pixels.",
+  },
+  {
+    icon: Watch,
+    title: "Wearable Sync",
+    description:
+      "Apple Health, Whoop, Garmin, Oura. Readiness, HRV, and sleep feed straight into the coach's dashboard. Train smart, recover smarter.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Business Analytics",
+    description:
+      "MRR, retention, churn, LTV — every lever of your coaching business, visualized. Know which clients are thriving and which need a call.",
+  },
+  {
+    icon: Palette,
+    title: "White-Label Branding",
+    description:
+      "Your logo. Your colors. Your domain. Clients see your brand — not ours. Premium coaches deserve a premium, owned experience.",
+  },
+  {
+    icon: BrainCircuit,
+    title: "AI Program Assist",
+    description:
+      "Describe the goal, equipment, and constraints. Get a starter program in seconds. You stay the architect — AI handles the grunt work.",
+  },
+] as const;
+
+const integrations = [
+  "Stripe",
+  "Apple Health",
+  "Google Calendar",
+  "Whoop",
+  "Garmin",
+  "Strava",
+  "Oura",
+  "Zoom",
+] as const;
+
+const comparisonRows = [
+  { feature: "All-in-one workspace", onyx: true, sheets: false, generic: "mid" },
+  { feature: "Programming + tracking", onyx: true, sheets: "mid", generic: true },
+  { feature: "Integrated payments & invoicing", onyx: true, sheets: false, generic: false },
+  { feature: "Video form checks in-app", onyx: true, sheets: false, generic: "mid" },
+  { feature: "White-label client experience", onyx: true, sheets: false, generic: false },
+  { feature: "Business analytics", onyx: true, sheets: false, generic: false },
+  { feature: "Scales with your roster", onyx: true, sheets: false, generic: "mid" },
+] as const;
+
+const foundingPerks = [
+  "Founder pricing locked in — for life.",
+  "Priority access to every new feature, before public release.",
+  "Direct line to the founders. Shape the roadmap.",
+  "Exclusive \"Founding 100\" badge on your coach profile.",
+  "12 months of white-label branding included.",
+  "Free migration from your current tools.",
+] as const;
+
+const faqs = [
+  {
+    q: "When does OnyxFit launch?",
+    a: "We're in active development and opening a closed beta to the Founding 100 in the coming months. Join the waitlist — you'll be the first to know, and the first let in.",
+  },
+  {
+    q: "How is OnyxFit different from Trainerize, TrueCoach, or Everfit?",
+    a: "Most coaching platforms started a decade ago and have been adding features ever since. OnyxFit is built from scratch for the modern elite coach — faster, cleaner, with business analytics, AI assist, and white-labeling built in from day one, not bolted on.",
+  },
+  {
+    q: "Can I migrate my existing clients and programs?",
+    a: "Yes. Every Founding 100 member gets free white-glove migration. Send us your spreadsheets, your Trainerize export, or your Notion doc — we'll move it all in and hand you back a clean workspace.",
+  },
+  {
+    q: "Does it work for solo trainers, or also for gyms and teams?",
+    a: "Both. OnyxFit scales from a single independent coach to multi-coach studios with shared client rosters, team programs, and role-based permissions.",
+  },
+  {
+    q: "Is my client data private and secure?",
+    a: "Non-negotiable. All data is encrypted in transit and at rest. We're building toward HIPAA-grade practices for health data, never sell information, and let clients export or delete their data at any time.",
+  },
+  {
+    q: "What will it cost?",
+    a: "Public pricing will be announced at launch. Founding 100 members lock in founder pricing — permanently below public rates — for the lifetime of their subscription.",
+  },
+] as const;
+
 /* -------------------------------------------------------------------------- */
 /*                               Page Sections                                */
 /* -------------------------------------------------------------------------- */
@@ -169,11 +334,14 @@ function Nav() {
         <a href="#features" className="text-sm text-zinc-400 transition-colors hover:text-white">
           Features
         </a>
-        <a href="#dual" className="text-sm text-zinc-400 transition-colors hover:text-white">
-          For Trainers & Athletes
+        <a href="#how-it-works" className="text-sm text-zinc-400 transition-colors hover:text-white">
+          How It Works
         </a>
-        <a href="#waitlist" className="text-sm text-zinc-400 transition-colors hover:text-white">
-          Early Access
+        <a href="#founding" className="text-sm text-zinc-400 transition-colors hover:text-white">
+          Founding 100
+        </a>
+        <a href="#faq" className="text-sm text-zinc-400 transition-colors hover:text-white">
+          FAQ
         </a>
       </nav>
       <Button
@@ -275,10 +443,17 @@ function Hero() {
 
           <div id="waitlist" className="mt-10 flex w-full flex-col items-center gap-4">
             <WaitlistForm variant="hero" />
-            <p className="flex items-center gap-2 text-xs text-zinc-500">
-              <ShieldCheck className="h-3.5 w-3.5" />
-              No spam. Just a single message when we open the doors.
-            </p>
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-zinc-500">
+              <span className="flex items-center gap-2">
+                <ShieldCheck className="h-3.5 w-3.5" />
+                No spam. One message when we open the doors.
+              </span>
+              <span className="hidden h-1 w-1 rounded-full bg-zinc-700 sm:inline-block" />
+              <span className="flex items-center gap-2 text-orange-400/90">
+                <Crown className="h-3.5 w-3.5" />
+                62 / 100 founding spots claimed
+              </span>
+            </div>
           </div>
 
           <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs uppercase tracking-widest text-zinc-600">
@@ -512,6 +687,384 @@ function DualExperience() {
   );
 }
 
+function Stats() {
+  return (
+    <section className="relative border-t border-zinc-900 bg-zinc-950">
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+          {stats.map(({ icon: Icon, value, label }) => (
+            <div key={label} className="flex flex-col items-center text-center md:items-start md:text-left">
+              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900/60 text-orange-500">
+                <Icon className="h-5 w-5" />
+              </div>
+              <div className="text-3xl font-bold tracking-tight text-white md:text-4xl">
+                {value}
+              </div>
+              <div className="mt-1 text-xs uppercase tracking-widest text-zinc-500">
+                {label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Problem() {
+  return (
+    <section className="relative border-t border-zinc-900 py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-orange-500">
+            The Old Way
+          </p>
+          <h2 className="mt-3 text-balance text-4xl font-bold tracking-tight text-white md:text-5xl">
+            Your craft deserves better tools.
+          </h2>
+          <p className="mt-4 text-balance text-zinc-400 md:text-lg">
+            Elite coaching is a high-leverage skill. It shouldn&apos;t be buried
+            under spreadsheets, sticky notes, and a browser with 30 tabs open.
+          </p>
+        </div>
+
+        <div className="mt-16 grid gap-6 md:grid-cols-3">
+          {problems.map(({ icon: Icon, title, description }) => (
+            <div
+              key={title}
+              className="relative rounded-xl border border-zinc-800/80 bg-gradient-to-b from-zinc-900/60 to-zinc-950/60 p-6"
+            >
+              <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-red-500/20 bg-red-500/5 text-red-400">
+                <Icon className="h-5 w-5" strokeWidth={2} />
+              </div>
+              <h3 className="text-lg font-semibold text-white">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+                {description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HowItWorks() {
+  return (
+    <section id="how-it-works" className="relative border-t border-zinc-900 py-24 md:py-32">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(234,88,12,0.08),transparent_60%)]" />
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-orange-500">
+            How It Works
+          </p>
+          <h2 className="mt-3 text-balance text-4xl font-bold tracking-tight text-white md:text-5xl">
+            Three steps from chaos to command.
+          </h2>
+          <p className="mt-4 text-balance text-zinc-400 md:text-lg">
+            No six-week onboarding. No consultants. Just three steps between you
+            and a business that runs itself.
+          </p>
+        </div>
+
+        <div className="mt-16 grid gap-6 md:grid-cols-3">
+          {steps.map(({ icon: Icon, step, title, description }, i) => (
+            <div key={title} className="relative">
+              <Card interactive className="relative h-full p-8">
+                <div className="mb-6 flex items-center justify-between">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-orange-600/30 bg-orange-600/10 text-orange-400">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <span className="bg-gradient-to-br from-zinc-600 to-zinc-800 bg-clip-text text-4xl font-black text-transparent">
+                    {step}
+                  </span>
+                </div>
+                <h3 className="text-xl font-semibold text-white">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+                  {description}
+                </p>
+              </Card>
+              {i < steps.length - 1 && (
+                <div className="pointer-events-none absolute left-full top-1/2 z-10 hidden -translate-y-1/2 -translate-x-1/2 md:block">
+                  <ArrowRight className="h-5 w-5 text-orange-600/60" />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BeyondBasics() {
+  return (
+    <section className="relative border-t border-zinc-900 py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-orange-500">
+            Beyond the Basics
+          </p>
+          <h2 className="mt-3 text-balance text-4xl font-bold tracking-tight text-white md:text-5xl">
+            The details that move the needle.
+          </h2>
+          <p className="mt-4 text-balance text-zinc-400 md:text-lg">
+            Fundamentals win fights. But champions are made in the details.
+            Here&apos;s what else is being forged.
+          </p>
+        </div>
+
+        <div className="mt-16 grid gap-px overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-800/80 sm:grid-cols-2 lg:grid-cols-3">
+          {secondaryFeatures.map(({ icon: Icon, title, description }) => (
+            <div
+              key={title}
+              className="group relative bg-zinc-950 p-8 transition-colors duration-300 hover:bg-zinc-900/60"
+            >
+              <div className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-900 text-orange-500 transition-all duration-300 group-hover:bg-orange-600/10 group-hover:text-orange-400">
+                <Icon className="h-5 w-5" strokeWidth={2} />
+              </div>
+              <h3 className="text-base font-semibold text-white">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+                {description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Integrations() {
+  return (
+    <section className="relative border-t border-zinc-900 py-20">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto mb-10 flex max-w-2xl flex-col items-center text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/60 px-3 py-1 text-xs uppercase tracking-widest text-zinc-400">
+            <Globe className="h-3 w-3 text-orange-500" />
+            Works with your stack
+          </div>
+          <h2 className="mt-6 text-balance text-2xl font-bold tracking-tight text-white md:text-3xl">
+            Plays well with the tools your clients already live in.
+          </h2>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 md:gap-x-14">
+          {integrations.map((name) => (
+            <div
+              key={name}
+              className="text-lg font-semibold tracking-tight text-zinc-500 transition-colors duration-200 hover:text-white md:text-xl"
+            >
+              {name}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Comparison() {
+  const renderCell = (v: boolean | "mid") => {
+    if (v === true) {
+      return (
+        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-orange-600/10 ring-1 ring-orange-600/40">
+          <CheckCircle2 className="h-3.5 w-3.5 text-orange-500" />
+        </div>
+      );
+    }
+    if (v === "mid") {
+      return (
+        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-800 ring-1 ring-zinc-700">
+          <span className="text-xs text-zinc-500">~</span>
+        </div>
+      );
+    }
+    return (
+      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-900 ring-1 ring-zinc-800">
+        <X className="h-3.5 w-3.5 text-zinc-600" />
+      </div>
+    );
+  };
+
+  return (
+    <section className="relative border-t border-zinc-900 py-24 md:py-32">
+      <div className="mx-auto max-w-5xl px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-orange-500">
+            The Honest Comparison
+          </p>
+          <h2 className="mt-3 text-balance text-4xl font-bold tracking-tight text-white md:text-5xl">
+            Why coaches are switching.
+          </h2>
+        </div>
+
+        <div className="mt-12 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/40">
+          <div className="grid grid-cols-[1.6fr_1fr_1fr_1fr] items-center gap-2 border-b border-zinc-800 bg-zinc-950/60 px-4 py-4 text-xs font-semibold uppercase tracking-widest text-zinc-400 sm:px-6">
+            <div>Capability</div>
+            <div className="flex items-center justify-center gap-1.5 text-orange-500">
+              <Hammer className="h-3.5 w-3.5" />
+              OnyxFit
+            </div>
+            <div className="text-center">Spreadsheets</div>
+            <div className="text-center">Legacy apps</div>
+          </div>
+          {comparisonRows.map((row, i) => (
+            <div
+              key={row.feature}
+              className={cn(
+                "grid grid-cols-[1.6fr_1fr_1fr_1fr] items-center gap-2 px-4 py-4 text-sm sm:px-6",
+                i !== comparisonRows.length - 1 && "border-b border-zinc-800/60"
+              )}
+            >
+              <div className="text-zinc-200">{row.feature}</div>
+              <div className="flex justify-center">{renderCell(row.onyx)}</div>
+              <div className="flex justify-center">{renderCell(row.sheets)}</div>
+              <div className="flex justify-center">{renderCell(row.generic)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Founding() {
+  return (
+    <section id="founding" className="relative border-t border-zinc-900 py-24 md:py-32">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-1/2 h-[400px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-600/10 blur-[100px]" />
+      </div>
+
+      <div className="mx-auto max-w-5xl px-6">
+        <Card className="relative overflow-hidden p-8 md:p-14">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.05]"
+            style={{
+              backgroundImage:
+                "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
+              backgroundSize: "48px 48px",
+            }}
+          />
+
+          <div className="relative grid gap-10 lg:grid-cols-[1.1fr_1fr]">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-orange-600/30 bg-orange-600/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-orange-400">
+                <Crown className="h-3.5 w-3.5" />
+                Founding 100
+              </div>
+              <h2 className="mt-6 text-balance text-4xl font-bold tracking-tight text-white md:text-5xl">
+                The first 100 coaches shape the forge.
+              </h2>
+              <p className="mt-4 text-balance text-zinc-400 md:text-lg">
+                We&apos;re hand-picking the first hundred coaches to go live with
+                OnyxFit. You get founder pricing for life, direct input on the
+                roadmap, and perks we&apos;ll never offer again.
+              </p>
+
+              <div className="mt-8 space-y-3">
+                <div className="flex items-center justify-between text-xs uppercase tracking-widest text-zinc-500">
+                  <span>Founding spots claimed</span>
+                  <span className="font-semibold text-orange-400">62 / 100</span>
+                </div>
+                <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-800">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-orange-600 to-orange-400"
+                    style={{ width: "62%" }}
+                  />
+                </div>
+                <p className="text-xs text-zinc-500">
+                  Once the 100 are in, founder pricing is gone. For good.
+                </p>
+              </div>
+
+              <div className="mt-8">
+                <WaitlistForm />
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-orange-500">
+                <Award className="h-4 w-4" />
+                What you get
+              </div>
+              <ul className="space-y-3">
+                {foundingPerks.map((perk) => (
+                  <li
+                    key={perk}
+                    className="flex items-start gap-3 rounded-lg border border-zinc-800/80 bg-zinc-950/60 p-4"
+                  >
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-orange-500" />
+                    <span className="text-sm text-zinc-200">{perk}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </section>
+  );
+}
+
+function FAQItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="border-b border-zinc-800/80 last:border-b-0">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between gap-6 py-5 text-left transition-colors duration-200 hover:text-orange-400"
+        aria-expanded={open}
+      >
+        <span className="text-base font-semibold text-white md:text-lg">
+          {q}
+        </span>
+        <ChevronDown
+          className={cn(
+            "h-5 w-5 flex-shrink-0 text-zinc-500 transition-transform duration-300",
+            open && "rotate-180 text-orange-500"
+          )}
+        />
+      </button>
+      <div
+        className={cn(
+          "grid transition-all duration-300 ease-out",
+          open ? "grid-rows-[1fr] opacity-100 pb-5" : "grid-rows-[0fr] opacity-0"
+        )}
+      >
+        <div className="overflow-hidden">
+          <p className="max-w-3xl text-sm leading-relaxed text-zinc-400 md:text-base">
+            {a}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FAQ() {
+  return (
+    <section id="faq" className="relative border-t border-zinc-900 py-24 md:py-32">
+      <div className="mx-auto max-w-4xl px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-orange-500">
+            Straight Answers
+          </p>
+          <h2 className="mt-3 text-balance text-4xl font-bold tracking-tight text-white md:text-5xl">
+            Questions, asked and answered.
+          </h2>
+        </div>
+
+        <div className="mt-12 rounded-xl border border-zinc-800/80 bg-zinc-900/40 px-6 md:px-8">
+          {faqs.map((f) => (
+            <FAQItem key={f.q} q={f.q} a={f.a} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function CTASection() {
   return (
     <section className="relative border-t border-zinc-900 py-24 md:py-32">
@@ -565,8 +1118,16 @@ export default function Page() {
     <main className="min-h-screen bg-zinc-950 font-sans text-white antialiased selection:bg-orange-600/30 selection:text-orange-100">
       <Nav />
       <Hero />
+      <Stats />
+      <Problem />
       <Features />
+      <HowItWorks />
       <DualExperience />
+      <BeyondBasics />
+      <Integrations />
+      <Comparison />
+      <Founding />
+      <FAQ />
       <CTASection />
       <Footer />
     </main>
