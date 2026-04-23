@@ -2,28 +2,43 @@
 
 > Forged in iron. Built for the elite trainer and their athletes.
 
-A modern, conversion-focused landing page for **OnyxFit**, an all-in-one platform for personal trainers and their clients. Built with Next.js 14 App Router, Tailwind CSS, and Lucide icons.
+A modern, conversion-focused landing page for **OnyxFit**, the trainer-client platform for personal trainers and their clients. Built with Next.js 14 App Router, Tailwind CSS, and Lucide icons.
+
+OnyxFit focuses on the human relationship — communication, calendar, booking, trainer profiles, program & diet creation, and tracking. AI coaching and advanced self-directed tracking live in our companion product, **Anvil**, which plugs into OnyxFit out of the box.
 
 ## Stack
 
 - [Next.js 14](https://nextjs.org) — App Router, React Server Components
-- [Tailwind CSS](https://tailwindcss.com) — dark-mode-first design system
+- [Tailwind CSS](https://tailwindcss.com) — with full light/dark theming (class strategy)
 - [Lucide React](https://lucide.dev) — icon set
-- Inline, shadcn-style UI primitives (`Button`, `Card`, `Input`, `Badge`) — no runtime dependency
+- Inline, shadcn-style UI primitives (`Button`, `Card`, `Input`, `Badge`, `ThemeToggle`) — no runtime dependency
 
 ## Design language
 
-- **Strict dark mode.** `zinc-950` base, `zinc-900` cards, white text.
+- **Dark-first, light-ready.** `zinc-950` base / `zinc-900` cards in dark, white / `zinc-50` in light.
 - **Forge accent.** Rust-orange (`orange-500` / `orange-600`) for CTAs and highlights.
 - **Aura.** Elite, raw, professional — iron, forge, hard work. Not lifestyle. Not cute.
 
+## Theme toggle
+
+Sun/Moon toggle in the nav. Saves the user's choice to `localStorage` under `onyxfit-theme`. A blocking inline script in `<head>` hydrates the `dark` class before paint to prevent FOUC, falling back to `prefers-color-scheme` for first-time visitors.
+
 ## Sections
 
-1. **Hero** — "In the Forge" early-access badge, H1 about the final link between trainer & athlete, email waitlist CTA.
-2. **Features Grid** — Roster Command, Program Architect, Direct Line & Form Checks, Automated Payments.
-3. **Dual Experience** — The Trainer's Command Center vs. The Athlete's Arena, each with a live-feeling UI mock.
-4. **Closing CTA** — Founding-member pitch with a second waitlist form.
-5. **Footer** — Minimal brand + copyright.
+1. **Hero** — "In the Forge" early-access badge, H1 about the final link between trainer & athlete, email waitlist CTA, founding-spots counter.
+2. **Stats bar** — 4 credibility metrics.
+3. **Problem** — 3 pain-points framing "the old way".
+4. **Features Grid** — Roster & Calendar, Program & Diet Builder, Direct Line & Form Checks, Bookings & Payments.
+5. **How It Works** — 3 steps: Onboard → Build → Scale.
+6. **Dual Experience** — Trainer's Command Center vs. Athlete's Arena, each with a live UI mock.
+7. **Beyond the Basics** — 6 additional capabilities: marketplace, public coach profile, white-label app, progress biometrics, business analytics, template library.
+8. **Integrations** — Stripe, Apple Health, Google Calendar, Whoop, Garmin, Oura, Strava, Zoom.
+9. **Comparison table** — OnyxFit vs. Spreadsheets vs. Legacy apps.
+10. **Anvil cross-promo** — companion AI product callout.
+11. **Founding 100** — scarcity tier with perks and inline waitlist.
+12. **FAQ** — 7-question accordion.
+13. **Closing CTA** — Founding-member pitch with a second waitlist form.
+14. **Footer** — Minimal brand + copyright.
 
 ## Getting started
 
@@ -38,9 +53,9 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ```
 app/
-  layout.tsx     # root layout, metadata, Inter font
+  layout.tsx     # root layout, metadata, Inter font, theme-preload script
   page.tsx       # the entire landing page (single file, drop-in ready)
-  globals.css    # Tailwind layers + base tweaks
+  globals.css    # Tailwind layers + grid-line CSS vars
 tailwind.config.ts
 next.config.mjs
 ```

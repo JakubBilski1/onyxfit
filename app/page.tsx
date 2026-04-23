@@ -5,30 +5,29 @@ import {
   ArrowRight,
   Award,
   BrainCircuit,
-  Calendar,
+  CalendarCheck,
   Camera,
   CheckCircle2,
   ChevronDown,
   Clock,
-  CreditCard,
   Crown,
   Dumbbell,
   Flame,
   Globe,
   Hammer,
   Layers,
+  Megaphone,
   Moon,
   Palette,
   Rocket,
-  Salad,
   ShieldCheck,
   Sparkles,
+  Store,
   Sun,
   Target,
   TrendingUp,
   Users,
   Video,
-  Watch,
   X,
   Zap,
 } from "lucide-react";
@@ -192,16 +191,16 @@ function ThemeToggle() {
 
 const features = [
   {
-    icon: Calendar,
-    title: "Roster Command",
+    icon: Users,
+    title: "Roster & Calendar",
     description:
-      "Manage every client, schedule every session, and never miss a detail. Your entire roster, organized like a war room.",
+      "Manage every client, plan every session, never miss a detail. Your entire roster and schedule in one command center.",
   },
   {
     icon: Dumbbell,
-    title: "Program Architect",
+    title: "Program & Diet Builder",
     description:
-      "Forge bulletproof programs in minutes. Track every rep, every set, every PR. Progressive overload, automated.",
+      "Build training blocks and meal plans side by side. Your clients follow, log, and track from a single clean interface.",
   },
   {
     icon: Video,
@@ -210,10 +209,10 @@ const features = [
       "Real-time chat and async video review. Drop timestamped feedback on client lifts. Fix technique before it breaks them.",
   },
   {
-    icon: CreditCard,
-    title: "Automated Payments",
+    icon: CalendarCheck,
+    title: "Bookings & Payments",
     description:
-      "Recurring billing, invoices, and payouts — handled. Get paid on time, every time. No awkward reminders.",
+      "Clients book sessions straight from your calendar. Deposits, reminders, recurring billing — all handled automatically.",
   },
 ] as const;
 
@@ -271,10 +270,22 @@ const steps = [
 
 const secondaryFeatures = [
   {
-    icon: Salad,
-    title: "Nutrition Coaching",
+    icon: Globe,
+    title: "Trainer Marketplace",
     description:
-      "Macro targets, meal plans, and a searchable food database. Log meals from the same app — no more MyFitnessPal screenshots.",
+      "A public directory where athletes discover their next coach. Get found by clients who match your specialty, style, and price point.",
+  },
+  {
+    icon: Megaphone,
+    title: "Public Coach Profile",
+    description:
+      "Every coach gets a branded marketing page. Credentials, testimonials, pricing, booking CTA — a site that sells while you train.",
+  },
+  {
+    icon: Palette,
+    title: "White-Label Client App",
+    description:
+      "Your logo. Your colors. Your domain. Inside the app, clients see your brand — not ours. A premium, owned experience from day one.",
   },
   {
     icon: Camera,
@@ -283,28 +294,16 @@ const secondaryFeatures = [
       "Side-by-side photo comparisons, measurements, and body composition tracking. Show the transformation in numbers and in pixels.",
   },
   {
-    icon: Watch,
-    title: "Wearable Sync",
-    description:
-      "Apple Health, Whoop, Garmin, Oura. Readiness, HRV, and sleep feed straight into the coach's dashboard. Train smart, recover smarter.",
-  },
-  {
     icon: TrendingUp,
     title: "Business Analytics",
     description:
       "MRR, retention, churn, LTV — every lever of your coaching business, visualized. Know which clients are thriving and which need a call.",
   },
   {
-    icon: Palette,
-    title: "White-Label Branding",
+    icon: Store,
+    title: "Template Library",
     description:
-      "Your logo. Your colors. Your domain. Clients see your brand — not ours. Premium coaches deserve a premium, owned experience.",
-  },
-  {
-    icon: BrainCircuit,
-    title: "AI Program Assist",
-    description:
-      "Describe the goal, equipment, and constraints. Get a starter program in seconds. You stay the architect — AI handles the grunt work.",
+      "Save your signature blocks, cycles, and nutrition frameworks as reusable templates. Duplicate, adjust, deploy. Scale your methodology.",
   },
 ] as const;
 
@@ -321,12 +320,13 @@ const integrations = [
 
 const comparisonRows = [
   { feature: "All-in-one workspace", onyx: true, sheets: false, generic: "mid" },
-  { feature: "Programming + tracking", onyx: true, sheets: "mid", generic: true },
+  { feature: "Programming + diet builder", onyx: true, sheets: "mid", generic: true },
+  { feature: "Client booking & calendar", onyx: true, sheets: false, generic: "mid" },
   { feature: "Integrated payments & invoicing", onyx: true, sheets: false, generic: false },
   { feature: "Video form checks in-app", onyx: true, sheets: false, generic: "mid" },
+  { feature: "Public trainer profile page", onyx: true, sheets: false, generic: false },
+  { feature: "Marketplace discovery", onyx: true, sheets: false, generic: false },
   { feature: "White-label client experience", onyx: true, sheets: false, generic: false },
-  { feature: "Business analytics", onyx: true, sheets: false, generic: false },
-  { feature: "Scales with your roster", onyx: true, sheets: false, generic: "mid" },
 ] as const;
 
 const foundingPerks = [
@@ -345,7 +345,11 @@ const faqs = [
   },
   {
     q: "How is OnyxFit different from Trainerize, TrueCoach, or Everfit?",
-    a: "Most coaching platforms started a decade ago and have been adding features ever since. OnyxFit is built from scratch for the modern elite coach — faster, cleaner, with business analytics, AI assist, and white-labeling built in from day one, not bolted on.",
+    a: "Most coaching platforms started a decade ago and have been adding features ever since. OnyxFit is built from scratch for the modern coach — booking, marketplace discovery, white-label client experience, and a public marketing page all included from day one, not bolted on later.",
+  },
+  {
+    q: "Where's the AI coaching? Meal-plan generation? Wearable sync?",
+    a: "That lives in our companion product, Anvil. OnyxFit is the trainer-client platform — programming, communication, booking, payments. Anvil is the AI coach — personalized plans, adaptive nutrition, deep tracking. They share one account and plug into each other. Use one, use both.",
   },
   {
     q: "Can I migrate my existing clients and programs?",
@@ -384,6 +388,9 @@ function Nav() {
         </a>
         <a href="#how-it-works" className="text-sm text-zinc-600 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white">
           How It Works
+        </a>
+        <a href="#anvil" className="text-sm text-zinc-600 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white">
+          Anvil AI
         </a>
         <a href="#founding" className="text-sm text-zinc-600 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white">
           Founding 100
@@ -973,6 +980,77 @@ function Comparison() {
   );
 }
 
+function AnvilCrossPromo() {
+  return (
+    <section id="anvil" className="relative border-t border-zinc-200 py-24 md:py-32 dark:border-zinc-900">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.08),transparent_70%)]" />
+
+      <div className="mx-auto max-w-6xl px-6">
+        <Card className="relative overflow-hidden p-8 md:p-14">
+          <div className="pointer-events-none absolute inset-0 bg-grid-dense opacity-70" />
+
+          <div className="relative grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-orange-600/30 bg-orange-600/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-orange-600 dark:text-orange-400">
+                <BrainCircuit className="h-3.5 w-3.5" />
+                Companion Product
+              </div>
+              <h2 className="mt-6 text-balance text-4xl font-bold tracking-tight text-zinc-950 md:text-5xl dark:text-white">
+                Need AI firepower? <br />
+                <span className="bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 bg-clip-text text-transparent dark:from-orange-400 dark:via-orange-500 dark:to-orange-700">
+                  Plug in Anvil.
+                </span>
+              </h2>
+              <p className="mt-4 text-balance text-zinc-600 md:text-lg dark:text-zinc-400">
+                Anvil is our AI coaching engine — personalized programs, adaptive
+                nutrition, deep workout tracking, and wearable intelligence. Your
+                clients use it solo. You review and approve inside OnyxFit.
+              </p>
+              <p className="mt-3 text-sm text-zinc-500">
+                Built to plug into OnyxFit out of the box. Same account. Same data.
+                Same forge.
+              </p>
+
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Button size="md" variant="outline" onClick={() => { /* swap for Anvil URL */ }}>
+                  Explore Anvil
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+                <span className="text-xs text-zinc-500">
+                  Separate product. One login.
+                </span>
+              </div>
+            </div>
+
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {[
+                { icon: BrainCircuit, label: "AI-generated programs" },
+                { icon: Sparkles, label: "Adaptive nutrition plans" },
+                { icon: TrendingUp, label: "Deep workout analytics" },
+                { icon: Zap, label: "Photo-based food logging" },
+                { icon: Layers, label: "Wearable data sync" },
+                { icon: ShieldCheck, label: "Coach-reviewable outputs" },
+              ].map(({ icon: Icon, label }) => (
+                <li
+                  key={label}
+                  className="flex items-center gap-3 rounded-lg border border-zinc-200/80 bg-white/60 p-4 dark:border-zinc-800/80 dark:bg-zinc-950/60"
+                >
+                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-orange-600/10 text-orange-600 dark:text-orange-500">
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+                    {label}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Card>
+      </div>
+    </section>
+  );
+}
+
 function Founding() {
   return (
     <section id="founding" className="relative border-t border-zinc-200 py-24 md:py-32 dark:border-zinc-900">
@@ -1163,6 +1241,7 @@ export default function Page() {
       <BeyondBasics />
       <Integrations />
       <Comparison />
+      <AnvilCrossPromo />
       <Founding />
       <FAQ />
       <CTASection />
