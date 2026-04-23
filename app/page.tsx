@@ -142,6 +142,66 @@ function Badge({ children }: { children: ReactNode }) {
   );
 }
 
+function PhoneFrame({
+  children,
+  statusLabel = "OnyxFit",
+  className,
+}: {
+  children: ReactNode;
+  statusLabel?: string;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "relative mx-auto w-full max-w-[280px] rounded-[2.4rem] border-[10px] border-zinc-900 bg-zinc-900 p-0 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)_inset] dark:border-zinc-950 dark:shadow-[0_30px_60px_-20px_rgba(234,88,12,0.15),0_0_0_1px_rgba(255,255,255,0.04)_inset]",
+        className
+      )}
+    >
+      {/* Side buttons (decorative) */}
+      <div aria-hidden className="absolute -left-[12px] top-16 h-10 w-[3px] rounded-l bg-zinc-800 dark:bg-zinc-900" />
+      <div aria-hidden className="absolute -left-[12px] top-32 h-16 w-[3px] rounded-l bg-zinc-800 dark:bg-zinc-900" />
+      <div aria-hidden className="absolute -right-[12px] top-24 h-14 w-[3px] rounded-r bg-zinc-800 dark:bg-zinc-900" />
+
+      {/* Screen */}
+      <div className="relative overflow-hidden rounded-[1.7rem] bg-white dark:bg-zinc-950">
+        {/* Notch / dynamic island */}
+        <div aria-hidden className="absolute left-1/2 top-1.5 z-10 flex h-5 w-24 -translate-x-1/2 items-center justify-center rounded-full bg-zinc-900 dark:bg-black">
+          <div className="h-1 w-1 rounded-full bg-zinc-700 dark:bg-zinc-800" />
+        </div>
+
+        {/* Status bar */}
+        <div className="flex items-center justify-between px-5 pb-1 pt-2 text-[10px] font-semibold tabular-nums text-zinc-950 dark:text-white">
+          <span>9:41</span>
+          <span className="flex items-center gap-1 text-zinc-500">
+            <span className="block h-1.5 w-1.5 rounded-full bg-zinc-500" />
+            <span className="block h-1.5 w-2 rounded-full bg-zinc-500" />
+            <span className="block h-1.5 w-2.5 rounded-full bg-zinc-500" />
+          </span>
+        </div>
+
+        {/* App chrome */}
+        <div className="flex items-center justify-between border-b border-zinc-100 px-4 pb-2 pt-1 dark:border-zinc-900">
+          <div className="flex items-center gap-1.5">
+            <div className="flex h-4 w-4 items-center justify-center rounded-sm bg-gradient-to-br from-orange-500 to-orange-700">
+              <Hammer className="h-2.5 w-2.5 text-white" strokeWidth={2.5} />
+            </div>
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-600 dark:text-zinc-400">
+              {statusLabel}
+            </span>
+          </div>
+          <div className="text-[10px] text-zinc-400 dark:text-zinc-600">●●●</div>
+        </div>
+
+        {/* Content */}
+        <div className="bg-white px-4 py-4 dark:bg-zinc-950">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ThemeToggle() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [mounted, setMounted] = useState(false);
@@ -676,60 +736,107 @@ function DualExperience() {
               ))}
             </ul>
 
-            {/* Mock athlete view */}
-            <div className="mt-10 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-950/80">
-              <div className="mb-3 flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] uppercase tracking-widest text-zinc-400 dark:text-zinc-600">
-                    Today
+            {/* Mock athlete view — phone */}
+            <div className="mt-10">
+              <PhoneFrame statusLabel="OnyxFit">
+                <div className="mb-3 flex items-center justify-between">
+                  <div>
+                    <div className="text-[9px] uppercase tracking-widest text-zinc-400 dark:text-zinc-600">
+                      Today
+                    </div>
+                    <div className="text-sm font-semibold text-zinc-950 dark:text-white">
+                      Push Day — Week 4
+                    </div>
                   </div>
-                  <div className="text-sm font-semibold text-zinc-950 dark:text-white">
-                    Push Day — Week 4
+                  <div className="rounded-full bg-orange-600/10 px-2 py-1 text-[9px] font-semibold uppercase tracking-widest text-orange-600 dark:text-orange-500">
+                    Ready
                   </div>
                 </div>
-                <div className="rounded-full bg-orange-600/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-orange-600 dark:text-orange-500">
-                  Ready
-                </div>
-              </div>
-              <div className="space-y-2">
-                {[
-                  { name: "Bench Press", sets: "5 × 5", done: true },
-                  { name: "Overhead Press", sets: "4 × 6", done: true },
-                  { name: "Incline DB Press", sets: "3 × 8", done: false },
-                ].map((e) => (
-                  <div
-                    key={e.name}
-                    className={cn(
-                      "flex items-center justify-between rounded-md px-3 py-2.5",
-                      e.done
-                        ? "bg-orange-600/5 ring-1 ring-orange-600/20"
-                        : "bg-white dark:bg-zinc-900/80"
-                    )}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={cn(
-                          "flex h-5 w-5 items-center justify-center rounded-full border",
-                          e.done
-                            ? "border-orange-600 bg-orange-600"
-                            : "border-zinc-300 dark:border-zinc-700"
-                        )}
-                      >
-                        {e.done && <CheckCircle2 className="h-3 w-3 text-white" />}
+                <div className="space-y-2">
+                  {[
+                    { name: "Bench Press", sets: "5 × 5", done: true },
+                    { name: "Overhead Press", sets: "4 × 6", done: true },
+                    { name: "Incline DB Press", sets: "3 × 8", done: false },
+                    { name: "Cable Fly", sets: "3 × 12", done: false },
+                  ].map((e) => (
+                    <div
+                      key={e.name}
+                      className={cn(
+                        "flex items-center justify-between rounded-md px-2.5 py-2",
+                        e.done
+                          ? "bg-orange-600/5 ring-1 ring-orange-600/20"
+                          : "bg-zinc-50 dark:bg-zinc-900/80"
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div
+                          className={cn(
+                            "flex h-4 w-4 items-center justify-center rounded-full border",
+                            e.done
+                              ? "border-orange-600 bg-orange-600"
+                              : "border-zinc-300 dark:border-zinc-700"
+                          )}
+                        >
+                          {e.done && <CheckCircle2 className="h-2.5 w-2.5 text-white" />}
+                        </div>
+                        <span
+                          className={cn(
+                            "text-[11px] font-medium",
+                            e.done ? "text-zinc-500 line-through dark:text-zinc-400" : "text-zinc-950 dark:text-white"
+                          )}
+                        >
+                          {e.name}
+                        </span>
                       </div>
+                      <span className="text-[11px] text-zinc-500">{e.sets}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* PR banner */}
+                <div className="mt-3 flex items-center gap-2 rounded-md border border-orange-600/20 bg-orange-600/5 px-2.5 py-2">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-600/20">
+                    <Flame className="h-3 w-3 text-orange-600 dark:text-orange-500" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-[10px] font-semibold text-zinc-950 dark:text-white">
+                      New PR — Bench +2.5kg
+                    </div>
+                    <div className="text-[9px] text-zinc-500">Logged 2 sec ago</div>
+                  </div>
+                </div>
+
+                {/* Bottom nav (decorative) */}
+                <div className="-mx-4 mt-4 flex items-center justify-around border-t border-zinc-100 px-4 pb-1 pt-3 dark:border-zinc-900">
+                  {[
+                    { icon: Dumbbell, label: "Train", active: true },
+                    { icon: CalendarCheck, label: "Plan", active: false },
+                    { icon: Video, label: "Chat", active: false },
+                    { icon: Users, label: "Coach", active: false },
+                  ].map((t) => (
+                    <div key={t.label} className="flex flex-col items-center gap-0.5">
+                      <t.icon
+                        className={cn(
+                          "h-3.5 w-3.5",
+                          t.active
+                            ? "text-orange-600 dark:text-orange-500"
+                            : "text-zinc-400 dark:text-zinc-600"
+                        )}
+                      />
                       <span
                         className={cn(
-                          "text-xs font-medium",
-                          e.done ? "text-zinc-500 line-through dark:text-zinc-400" : "text-zinc-950 dark:text-white"
+                          "text-[8px] font-medium",
+                          t.active
+                            ? "text-orange-600 dark:text-orange-500"
+                            : "text-zinc-400 dark:text-zinc-600"
                         )}
                       >
-                        {e.name}
+                        {t.label}
                       </span>
                     </div>
-                    <span className="text-xs text-zinc-500">{e.sets}</span>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              </PhoneFrame>
             </div>
           </Card>
         </div>
