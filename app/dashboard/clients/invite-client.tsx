@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
 import { inviteClient, type InviteResult } from "./actions";
@@ -14,7 +13,6 @@ export function InviteClient({
   variant?: "signal" | "ghost" | "default";
   label?: string;
 }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const [state, action] = useFormState<InviteResult | null, FormData>(
@@ -23,8 +21,8 @@ export function InviteClient({
       if (r.ok) {
         formRef.current?.reset();
         setOpen(false);
-        router.push(`/dashboard/clients/${r.clientId}`);
-        router.refresh();
+        // Hard-nav so middleware sees the refreshed Supabase session cookies.
+        window.location.assign(`/dashboard/clients/${r.clientId}`);
       }
       return r;
     },

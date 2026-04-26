@@ -3,11 +3,18 @@
 import { useFormState, useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
-import { createProgram, type ActionResult } from "./actions";
+import { createProgram, type CreateProgramResult } from "./actions";
 
 export function NewProgramForm({ template = false }: { template?: boolean }) {
-  const [state, action] = useFormState<ActionResult | null, FormData>(
-    createProgram,
+  const [state, action] = useFormState<CreateProgramResult | null, FormData>(
+    async (prev, fd) => {
+      const r = await createProgram(prev, fd);
+      if (r.ok) {
+        // Hard-nav so middleware sees the refreshed Supabase session cookies.
+        window.location.assign(`/dashboard/forge/${r.programId}`);
+      }
+      return r;
+    },
     null,
   );
 

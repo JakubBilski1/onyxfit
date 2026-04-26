@@ -2,7 +2,6 @@
 
 import { useRef, useState, useTransition } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import {
@@ -12,7 +11,6 @@ import {
 } from "./actions";
 
 export function CompoundForm({ clientId }: { clientId: string }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -23,7 +21,8 @@ export function CompoundForm({ clientId }: { clientId: string }) {
       if (r.ok) {
         formRef.current?.reset();
         setOpen(false);
-        router.refresh();
+        // Hard-nav so middleware sees the refreshed Supabase session cookies.
+        window.location.reload();
       }
       return r;
     },
@@ -97,7 +96,6 @@ export function CompoundRow({
   dose: string;
   withFood?: boolean;
 }) {
-  const router = useRouter();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
@@ -105,8 +103,12 @@ export function CompoundRow({
     setError(null);
     start(async () => {
       const r = await deleteCompound(id);
-      if (!r.ok) setError(r.error);
-      else router.refresh();
+      if (!r.ok) {
+        setError(r.error);
+        return;
+      }
+      // Hard-nav so middleware sees the refreshed Supabase session cookies.
+      window.location.reload();
     });
   }
 

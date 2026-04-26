@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,7 +34,6 @@ export type ActiveClip = {
 };
 
 export function Studio({ clip }: { clip: ActiveClip | null }) {
-  const router = useRouter();
   const supabase = getSupabaseBrowser();
   const [speedIdx, setSpeedIdx] = useState(2);
   const [tool, setTool] = useState<Tool>("LINE");
@@ -119,8 +117,12 @@ export function Studio({ clip }: { clip: ActiveClip | null }) {
     setError(null);
     start(async () => {
       const r = await sendFormCheck(clip.id, { text_feedback: text, annotations });
-      if (!r.ok) setError(r.error);
-      else router.refresh();
+      if (!r.ok) {
+        setError(r.error);
+        return;
+      }
+      // Hard-nav so middleware sees the refreshed Supabase session cookies.
+      window.location.assign("/dashboard/form-checks");
     });
   }
 
@@ -191,7 +193,8 @@ export function Studio({ clip }: { clip: ActiveClip | null }) {
       setVoiceUrl(data.signedUrl);
     }
     setRecState("idle");
-    router.refresh();
+    // No nav needed — local state already shows the new audio. Cookies were
+    // refreshed by the action POST and are now in the browser jar.
   }
 
   async function clearVoice() {
@@ -204,7 +207,6 @@ export function Studio({ clip }: { clip: ActiveClip | null }) {
         return;
       }
       setVoiceUrl(null);
-      router.refresh();
     });
   }
 

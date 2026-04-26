@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { applyProgramToClient } from "../actions";
@@ -15,7 +14,6 @@ export function ApplyToClient({
   programId: string;
   clients: ClientLite[];
 }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [clientId, setClientId] = useState<string>(clients[0]?.id ?? "");
   const [startsOn, setStartsOn] = useState(() =>
@@ -51,8 +49,8 @@ export function ApplyToClient({
         setError(r.error);
         return;
       }
-      router.push(`/dashboard/clients/${clientId}`);
-      router.refresh();
+      // Hard-nav so middleware sees the refreshed Supabase session cookies.
+      window.location.assign(`/dashboard/clients/${clientId}`);
     });
   }
 

@@ -2,20 +2,19 @@
 
 import { useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { addCustomExercise, type AddExerciseResult } from "./actions";
 
 export function AddCustomExercise() {
-  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const [state, action] = useFormState<AddExerciseResult | null, FormData>(
     async (prev, fd) => {
       const r = await addCustomExercise(prev, fd);
       if (r.ok) {
         formRef.current?.reset();
-        router.refresh();
+        // Hard-nav so middleware sees the refreshed Supabase session cookies.
+        window.location.reload();
       }
       return r;
     },

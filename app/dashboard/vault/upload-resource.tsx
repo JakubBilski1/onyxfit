@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
@@ -11,7 +10,6 @@ const ACCEPT = ".pdf,.doc,.docx,.png,.jpg,.jpeg,.webp,.mp4,.mov";
 const MAX_BYTES = 50 * 1024 * 1024;
 
 export function UploadResource({ userId }: { userId: string }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [busy, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +55,8 @@ export function UploadResource({ userId }: { userId: string }) {
       setStoragePath("");
       setFilename("");
       setOpen(false);
-      router.refresh();
+      // Hard-nav so middleware sees the refreshed Supabase session cookies.
+      window.location.reload();
     });
   }
 
@@ -187,7 +186,6 @@ export function ResourceRow({
   storagePath: string | null;
   externalUrl: string | null;
 }) {
-  const router = useRouter();
   const supabase = getSupabaseBrowser();
   const [confirming, setConfirming] = useState(false);
   const [pending, start] = useTransition();
@@ -213,8 +211,12 @@ export function ResourceRow({
     setError(null);
     start(async () => {
       const r = await deleteResource(id);
-      if (!r.ok) setError(r.error);
-      else router.refresh();
+      if (!r.ok) {
+        setError(r.error);
+        return;
+      }
+      // Hard-nav so middleware sees the refreshed Supabase session cookies.
+      window.location.reload();
     });
   }
 

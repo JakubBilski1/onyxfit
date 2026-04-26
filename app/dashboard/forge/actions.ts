@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { requireActiveCoach } from "@/lib/auth";
 import {
   BLOCK_KINDS,
@@ -13,14 +12,17 @@ import {
 } from "./types";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
+export type CreateProgramResult =
+  | { ok: true; programId: string }
+  | { ok: false; error: string };
 
 const NAME_MAX = 120;
 const GOAL_MAX = 60;
 
 export async function createProgram(
-  _prev: ActionResult | null,
+  _prev: CreateProgramResult | null,
   formData: FormData,
-): Promise<ActionResult> {
+): Promise<CreateProgramResult> {
   const { supabase, user } = await requireActiveCoach();
 
   const name = (formData.get("name") ?? "").toString().trim();
@@ -57,7 +59,7 @@ export async function createProgram(
   if (error) return { ok: false, error: error.message };
 
   revalidatePath("/dashboard/forge");
-  redirect(`/dashboard/forge/${data.id}`);
+  return { ok: true, programId: data.id };
 }
 
 // ─── custom exercises ──────────────────────────────────────────────────────

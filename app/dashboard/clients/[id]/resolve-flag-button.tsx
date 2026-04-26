@@ -24,7 +24,12 @@ export function ResolveFlagButton({
           setError(null);
           startTransition(async () => {
             const r = await resolveTriageFlag(flagId, clientId);
-            if (!r.ok) setError(r.error);
+            if (!r.ok) {
+              setError(r.error);
+              return;
+            }
+            // Hard-nav so middleware sees the refreshed Supabase session cookies.
+            window.location.reload();
           });
         }}
         disabled={pending}

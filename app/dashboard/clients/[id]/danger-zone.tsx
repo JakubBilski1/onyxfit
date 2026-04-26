@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +14,6 @@ export function DangerZone({
   clientId: string;
   onboardingComplete: boolean;
 }) {
-  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [confirming, setConfirming] = useState(false);
@@ -24,7 +22,12 @@ export function DangerZone({
     setError(null);
     startTransition(async () => {
       const r = await markOnboardingComplete(clientId);
-      if (!r.ok) setError(r.error);
+      if (!r.ok) {
+        setError(r.error);
+        return;
+      }
+      // Hard-nav so middleware sees the refreshed Supabase session cookies.
+      window.location.reload();
     });
   }
 
@@ -36,8 +39,8 @@ export function DangerZone({
         setError(r.error);
         return;
       }
-      router.push("/dashboard/clients");
-      router.refresh();
+      // Hard-nav so middleware sees the refreshed Supabase session cookies.
+      window.location.assign("/dashboard/clients");
     });
   }
 

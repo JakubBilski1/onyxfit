@@ -2,13 +2,11 @@
 
 import { useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { addCustomFood, type ActionResult } from "./actions";
 
 export function CustomFoodForm() {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const [state, action] = useFormState<ActionResult | null, FormData>(
@@ -16,7 +14,8 @@ export function CustomFoodForm() {
       const r = await addCustomFood(prev, fd);
       if (r.ok) {
         formRef.current?.reset();
-        router.refresh();
+        // Hard-nav so middleware sees the refreshed Supabase session cookies.
+        window.location.reload();
       }
       return r;
     },

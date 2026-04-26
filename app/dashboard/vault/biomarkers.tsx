@@ -2,7 +2,6 @@
 
 import { useMemo, useRef, useState, useTransition } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { useRouter } from "next/navigation";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
@@ -38,7 +37,6 @@ export function Biomarkers({
   clientId: string;
   rows: BiomarkerRow[];
 }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -57,7 +55,8 @@ export function Biomarkers({
         setDocPath("");
         setDocName("");
         setOpen(false);
-        router.refresh();
+        // Hard-nav so middleware sees the refreshed Supabase session cookies.
+        window.location.reload();
       }
       return r;
     },
@@ -237,7 +236,6 @@ function MarkerBlock({
   marker: string;
   points: BiomarkerRow[];
 }) {
-  const router = useRouter();
   const supabase = getSupabaseBrowser();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -246,8 +244,12 @@ function MarkerBlock({
     setError(null);
     start(async () => {
       const r = await deleteBiomarker(id);
-      if (!r.ok) setError(r.error);
-      else router.refresh();
+      if (!r.ok) {
+        setError(r.error);
+        return;
+      }
+      // Hard-nav so middleware sees the refreshed Supabase session cookies.
+      window.location.reload();
     });
   }
 
