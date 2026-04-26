@@ -61,23 +61,23 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+    { media: "(prefers-color-scheme: light)", color: "#faf7f1" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
   ],
 };
 
+// Inline script that runs before paint to prevent a theme flash. Reads the
+// stored preference (or system preference) and writes data-theme on <html>.
 const themeScript = `
 (function() {
   try {
-    var stored = localStorage.getItem('onyxfit-theme');
+    var stored = localStorage.getItem('onyx-theme');
     var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    var theme = stored || (prefersDark ? 'dark' : 'light');
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    var theme = stored || (prefersDark ? 'dark' : 'dark'); // default dark; users opt into light
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
   } catch (e) {
+    document.documentElement.setAttribute('data-theme', 'dark');
     document.documentElement.classList.add('dark');
   }
 })();
@@ -95,7 +95,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="bg-white font-sans text-zinc-950 antialiased dark:bg-zinc-950 dark:text-white">
+      <body className="bg-onyx-bg font-sans text-onyx-bone antialiased">
         {children}
       </body>
     </html>

@@ -124,11 +124,11 @@ export function CommandPalette({
 
       {open && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center pt-24 px-4"
+          className="fixed inset-0 z-50 bg-onyx-ink/60 backdrop-blur-sm flex items-start justify-center pt-24 px-4 onyx-enter"
           onClick={() => setOpen(false)}
         >
           <div
-            className="w-full max-w-xl bg-[#0c0c0c] border border-onyx-line shadow-2xl"
+            className="w-full max-w-xl bg-onyx-surface border border-onyx-line2 shadow-2xl rounded-sm animate-scale-in"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={onPaletteKey}
           >

@@ -16,6 +16,7 @@ import {
   Banknote,
   Megaphone,
   Library,
+  Plus,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -48,10 +49,12 @@ export function Sidebar({ scope, user }: { scope: "coach" | "admin"; user: { nam
   const isActive = (href: string) => (href === "/dashboard" || href === "/admin" ? path === href : path.startsWith(href));
 
   return (
-    <aside className="hidden lg:flex flex-col w-[260px] shrink-0 border-r border-onyx-line bg-[#0c0c0c]">
+    <aside className="hidden lg:flex flex-col w-[260px] shrink-0 border-r border-onyx-line bg-onyx-surface">
       <div className="px-7 pt-9 pb-7 border-b border-onyx-line">
-        <Link href="/" className="block">
-          <div className="onyx-display text-3xl text-onyx-bone leading-none">Onyx</div>
+        <Link href="/" className="block group">
+          <div className="onyx-display text-3xl text-onyx-bone leading-none transition-transform duration-200 group-hover:translate-x-0.5">
+            Onyx
+          </div>
           <div className="onyx-label mt-2">{scope === "admin" ? "God Mode" : "Coach Console"}</div>
         </Link>
       </div>
@@ -66,6 +69,23 @@ export function Sidebar({ scope, user }: { scope: "coach" | "admin"; user: { nam
             </Link>
           );
         })}
+
+        {scope === "coach" && (
+          <div className="mt-6 px-5">
+            <Link
+              href="/dashboard/clients"
+              className={cn(
+                "group flex items-center justify-between gap-3 px-4 py-3",
+                "border border-dashed border-onyx-line text-onyx-mute",
+                "hover:border-onyx-amber hover:text-onyx-amber hover:bg-onyx-amber/5",
+                "transition-[color,border-color,background-color] duration-200 ease-onyx-out",
+              )}
+            >
+              <span className="font-mono text-[10px] uppercase tracking-[0.28em]">+ Athlete</span>
+              <Plus size={13} strokeWidth={1.6} className="transition-transform duration-200 group-hover:rotate-90" />
+            </Link>
+          </div>
+        )}
       </nav>
 
       <div className="border-t border-onyx-line px-6 py-5">
@@ -74,7 +94,13 @@ export function Sidebar({ scope, user }: { scope: "coach" | "admin"; user: { nam
             <div className="text-[13px] text-onyx-bone truncate">{user.name}</div>
             <div className="text-[11px] text-onyx-dim font-mono truncate">{user.email}</div>
             <form action="/api/auth/sign-out" method="post" className="mt-4">
-              <button type="submit" className={cn("onyx-label hover:text-onyx-amber transition-colors")}>
+              <button
+                type="submit"
+                className={cn(
+                  "onyx-label hover:text-onyx-amber transition-colors",
+                  "active:scale-95 transition-transform",
+                )}
+              >
                 Sign Out →
               </button>
             </form>

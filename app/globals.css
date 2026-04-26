@@ -2,15 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   Design tokens. Switch via [data-theme="light"] / "dark" on <html>.
+   All values are space-separated RGB triplets so Tailwind can
+   wrap them in `rgb(<r> <g> <b> / <alpha-value>)` and opacity
+   modifiers (e.g. `bg-onyx-amber/10`) keep working in both modes.
+============================================================ */
+
 @layer base {
-  :root {
-    --grid-line: 9 9 11;
-    color-scheme: light;
+  :root,
+  [data-theme="dark"] {
+    --c-bg:        10 10 10;       /* #0a0a0a — page */
+    --c-surface:   18 18 18;       /* #121212 — sidebar / topbar */
+    --c-card:      23 23 23;       /* #171717 — cards */
+    --c-line:      40 40 38;       /* hairline */
+    --c-line2:     58 58 55;       /* hover-ish hairline */
+    --c-bone:      232 230 223;    /* primary text */
+    --c-mute:      138 135 128;    /* secondary text */
+    --c-dim:       90  88  83;     /* tertiary text */
+    --c-amber:     245 177 58;     /* signal */
+    --c-amber-dim: 183 131 32;
+    --c-red:       210 76 76;
+    --c-green:     111 168 114;
+    --c-ink:       10 10 10;       /* on-amber text colour */
+    --grid-line:   255 255 255;
+    color-scheme: dark;
   }
 
-  .dark {
-    --grid-line: 255 255 255;
-    color-scheme: dark;
+  [data-theme="light"] {
+    --c-bg:        250 247 241;    /* warm cream */
+    --c-surface:   255 255 255;    /* pure white surfaces */
+    --c-card:      255 255 255;
+    --c-line:      232 226 213;    /* warm hairline */
+    --c-line2:     208 200 184;
+    --c-bone:      26  24  21;     /* near-black */
+    --c-mute:      106 102 92;
+    --c-dim:       163 157 144;
+    --c-amber:     217 119 6;      /* darker amber for white bg contrast */
+    --c-amber-dim: 180 83 9;
+    --c-red:       192 57 43;
+    --c-green:     79  138 82;
+    --c-ink:       255 255 255;    /* on-amber text colour (light mode) */
+    --grid-line:   9   9   11;
+    color-scheme: light;
   }
 
   html {
@@ -19,12 +53,13 @@
 
   body {
     font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
-    transition: background-color 300ms ease, color 300ms ease;
+    transition: background-color 320ms cubic-bezier(0.2, 0.7, 0.2, 1),
+                color 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
   ::selection {
-    background-color: rgba(234, 88, 12, 0.3);
-    color: #fed7aa;
+    background-color: rgb(var(--c-amber) / 0.35);
+    color: rgb(var(--c-ink));
   }
 }
 
@@ -46,32 +81,50 @@
       linear-gradient(to bottom, rgb(var(--grid-line) / 0.05) 1px, transparent 1px);
     background-size: 48px 48px;
   }
+
+  /* Hover lift used on cards and tiles. Soft and theme-aware. */
+  .onyx-elevate {
+    transition: transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1),
+                box-shadow 240ms cubic-bezier(0.2, 0.7, 0.2, 1),
+                border-color 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .onyx-elevate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgb(var(--c-ink) / 0.12);
+    border-color: rgb(var(--c-line2));
+  }
+
+  /* Tap micro-feedback */
+  .onyx-press { transition: transform 120ms ease; }
+  .onyx-press:active { transform: scale(0.97); }
+
+  /* Soft entrance for primary content */
+  .onyx-enter {
+    animation: fade-in 280ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
 }
 
 /* ============================================================
-   ONYX COACH — editorial dark shell (used under /dashboard, /admin)
-   Avoid generic AI-slop. Hairline rules, oversized italic display,
-   uppercase tracking labels, single signal color (amber).
+   ONYX COACH — editorial shell (used under /dashboard, /admin)
+   Same identity in both themes: hairline rules, oversized italic
+   display, uppercase tracking labels, single signal color (amber).
 ============================================================ */
 
 .onyx-shell {
-  background: #0a0a0a;
-  color: #e8e6df;
+  background: rgb(var(--c-bg));
+  color: rgb(var(--c-bone));
   font-family: var(--font-plex), var(--font-inter), system-ui, sans-serif;
   font-feature-settings: "ss01" 1, "ss02" 1, "cv11" 1;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 320ms cubic-bezier(0.2, 0.7, 0.2, 1),
+              color 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-.onyx-shell ::selection {
-  background-color: rgba(245, 177, 58, 0.35);
-  color: #0a0a0a;
-}
-
-/* Atmospheric grain layer — gives surface a film-like texture */
+/* Atmospheric grain — only in dark mode, light mode stays clean */
 .onyx-grain {
   position: relative;
 }
-.onyx-grain::before {
+[data-theme="dark"] .onyx-grain::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -84,7 +137,7 @@
 /* Hairline rule */
 .onyx-rule {
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.18), transparent);
+  background: linear-gradient(to right, transparent, rgb(var(--c-mute) / 0.45), transparent);
 }
 
 /* Editorial display — oversized italic Instrument Serif */
@@ -102,17 +155,26 @@
   text-transform: uppercase;
   letter-spacing: 0.32em;
   font-size: 10px;
-  color: #8a8780;
+  color: rgb(var(--c-mute));
 }
 
-/* Card surface — mostly empty, hairline frame, almost-flat */
+/* Card surface */
 .onyx-card {
-  background: #121212;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 2px;
+  background: rgb(var(--c-card));
+  border: 1px solid rgb(var(--c-line));
+  border-radius: 4px;
+  transition: border-color 240ms cubic-bezier(0.2, 0.7, 0.2, 1),
+              box-shadow 240ms cubic-bezier(0.2, 0.7, 0.2, 1),
+              transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+[data-theme="light"] .onyx-card {
+  box-shadow: 0 1px 2px rgba(15, 15, 15, 0.04);
 }
 .onyx-card:hover {
-  border-color: rgba(255, 255, 255, 0.16);
+  border-color: rgb(var(--c-line2));
+}
+[data-theme="light"] .onyx-card:hover {
+  box-shadow: 0 4px 16px rgba(15, 15, 15, 0.08);
 }
 
 /* KPI value — hero italic numeral */
@@ -127,7 +189,7 @@
 
 /* Amber signal — used sparingly for actionable accents */
 .onyx-signal {
-  color: #f5b13a;
+  color: rgb(var(--c-amber));
 }
 
 /* Sidebar nav item */
@@ -135,21 +197,29 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 14px;
+  padding: 11px 18px;
   font-size: 13px;
   letter-spacing: 0.04em;
-  color: #8a8780;
+  color: rgb(var(--c-mute));
   border-left: 2px solid transparent;
-  transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+  position: relative;
+  transition: color 200ms cubic-bezier(0.2, 0.7, 0.2, 1),
+              border-color 200ms cubic-bezier(0.2, 0.7, 0.2, 1),
+              background 200ms cubic-bezier(0.2, 0.7, 0.2, 1),
+              padding 200ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .onyx-nav-item:hover {
-  color: #e8e6df;
-  background: rgba(255, 255, 255, 0.02);
+  color: rgb(var(--c-bone));
+  background: rgb(var(--c-bone) / 0.03);
+  padding-left: 20px;
 }
 .onyx-nav-item[data-active="true"] {
-  color: #f5b13a;
-  border-left-color: #f5b13a;
-  background: rgba(245, 177, 58, 0.04);
+  color: rgb(var(--c-amber));
+  border-left-color: rgb(var(--c-amber));
+  background: rgb(var(--c-amber) / 0.06);
+}
+.onyx-nav-item[data-active="true"] svg {
+  filter: drop-shadow(0 0 6px rgb(var(--c-amber) / 0.5));
 }
 
 /* Page reveal stagger */
@@ -171,12 +241,50 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 /* Forge — drag and drop placeholder */
 .onyx-forge-rail {
   background:
     repeating-linear-gradient(135deg,
-      rgba(255,255,255,0.03) 0px,
-      rgba(255,255,255,0.03) 1px,
+      rgb(var(--c-bone) / 0.03) 0px,
+      rgb(var(--c-bone) / 0.03) 1px,
       transparent 1px,
       transparent 9px);
+}
+
+/* Primary CTA shimmer used on the most important button on a page */
+.onyx-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    rgb(var(--c-amber)) 0%,
+    rgb(var(--c-amber)) 40%,
+    rgb(var(--c-amber) / 0.85) 50%,
+    rgb(var(--c-amber)) 60%,
+    rgb(var(--c-amber)) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3.2s linear infinite;
+}
+
+/* Pulse used by status dots etc. — gentler than tw default ping */
+@keyframes onyx-pulse-soft {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+.onyx-dot-pulse {
+  animation: onyx-pulse-soft 1.8s ease-in-out infinite;
+}
+
+/* Reduced motion — always respect it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

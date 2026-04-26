@@ -30,7 +30,7 @@ export function AthletePreview({ structure }: { structure: ProgramStructure }) {
             {w.days.map((d) => (
               <div
                 key={d.id}
-                className="border border-onyx-line bg-[#0e0e0e] p-5 space-y-4"
+                className="border border-onyx-line bg-onyx-surface p-5 space-y-4"
               >
                 <div className="flex items-baseline justify-between">
                   <h3 className="text-[16px] text-onyx-bone">{d.name}</h3>

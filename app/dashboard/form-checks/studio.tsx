@@ -212,7 +212,7 @@ export function Studio({ clip }: { clip: ActiveClip | null }) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 min-h-[440px]">
-      <div className="lg:col-span-3 bg-[#050505] relative flex items-center justify-center border-r border-onyx-line">
+      <div className="lg:col-span-3 bg-onyx-bg relative flex items-center justify-center border-r border-onyx-line">
         {clip?.videoUrl ? (
           <video
             ref={videoRef}

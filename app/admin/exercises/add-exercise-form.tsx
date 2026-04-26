@@ -39,7 +39,7 @@ export function AddExerciseForm() {
     <form
       ref={formRef}
       action={action}
-      className="space-y-4 border border-onyx-line p-5 bg-[#0c0c0c] w-full max-w-3xl"
+      className="space-y-4 border border-onyx-line p-5 bg-onyx-surface w-full max-w-3xl"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="md:col-span-2">
@@ -129,7 +129,7 @@ function Select({
     >
       <option value="">— pick —</option>
       {options.map((o) => (
-        <option key={o} value={o} className="bg-[#0c0c0c]">
+        <option key={o} value={o} className="bg-onyx-surface">
           {o}
         </option>
       ))}

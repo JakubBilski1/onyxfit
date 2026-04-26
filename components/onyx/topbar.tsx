@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { CommandPalette } from "./command-palette";
+import { ThemeToggle } from "./theme-toggle";
 import { Bell } from "lucide-react";
 
 export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
@@ -33,10 +34,10 @@ export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
   }
 
   return (
-    <header className="h-16 border-b border-onyx-line flex items-center justify-between px-8 sticky top-0 z-10 bg-onyx-bg/80 backdrop-blur">
+    <header className="h-16 border-b border-onyx-line flex items-center justify-between px-8 sticky top-0 z-30 bg-onyx-bg/80 backdrop-blur-md">
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2 text-onyx-mute font-mono text-[11px] tracking-widest">
-          <span className="block h-1.5 w-1.5 rounded-full bg-onyx-amber animate-pulse" />
+          <span className="block h-1.5 w-1.5 rounded-full bg-onyx-amber onyx-dot-pulse" />
           <span>{scope === "admin" ? "ADMIN / GOD MODE" : "COACH / LIVE"}</span>
         </div>
         <div className="hidden md:flex items-center gap-2 text-onyx-dim font-mono text-[11px]">
@@ -60,11 +61,12 @@ export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
         >
           <Bell size={16} strokeWidth={1.4} />
           {redCount > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 min-w-[14px] h-[14px] px-1 rounded-full bg-onyx-amber text-onyx-ink text-[9px] font-mono font-bold flex items-center justify-center">
+            <span className="absolute -top-1.5 -right-1.5 min-w-[14px] h-[14px] px-1 rounded-full bg-onyx-amber text-onyx-ink text-[9px] font-mono font-bold flex items-center justify-center shadow-onyx-glow">
               {redCount > 9 ? "9+" : redCount}
             </span>
           )}
         </Link>
+        <ThemeToggle />
         <Link
           href={scope === "admin" ? "/dashboard" : "/admin"}
           className="onyx-label hover:text-onyx-amber transition-colors"

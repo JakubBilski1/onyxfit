@@ -34,7 +34,7 @@ export default async function AdminFinancialCommandCenter() {
   const platformCutCents = Math.round((k.mrr_cents ?? 0) * 0.10);
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 onyx-enter">
       <PageHeader
         eyebrow="GOD MODE"
         title={<span>The <em className="not-italic onyx-signal">platform</em>, at a glance.</span>}

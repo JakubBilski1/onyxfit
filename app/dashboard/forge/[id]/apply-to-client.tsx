@@ -55,7 +55,7 @@ export function ApplyToClient({
   }
 
   return (
-    <div className="border border-onyx-line bg-[#0a0a0a] p-3 flex items-end gap-2 flex-wrap">
+    <div className="border border-onyx-line bg-onyx-surface p-3 flex items-end gap-2 flex-wrap">
       <div>
         <Label htmlFor="apply-client">Client</Label>
         <select
@@ -65,7 +65,7 @@ export function ApplyToClient({
           className="h-9 bg-transparent border-b border-onyx-line text-onyx-bone text-[13px] focus:outline-none focus:border-onyx-amber pr-6"
         >
           {clients.map((c) => (
-            <option key={c.id} value={c.id} className="bg-[#0a0a0a]">
+            <option key={c.id} value={c.id} className="bg-onyx-surface">
               {c.full_name}
             </option>
           ))}

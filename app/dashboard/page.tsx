@@ -2,11 +2,13 @@ import { getSupabaseServer } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/onyx/page-header";
 import { StatCard } from "@/components/onyx/stat-card";
 import { FlagTile } from "@/components/onyx/flag-tile";
+import { QuickActions } from "@/components/onyx/quick-actions";
 import { Card, CardHeader, CardTitle, CardBody } from "@/components/ui/card";
 import { EmptyState } from "@/components/onyx/empty-state";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { formatRelative } from "@/lib/utils";
+import { UserPlus, Hammer, ScanLine } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -47,11 +49,38 @@ export default async function TriagePage() {
   const activityCount = feed?.length ?? 0;
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 onyx-enter">
       <PageHeader
         eyebrow="THE TRIAGE"
         title={<span>Today&apos;s <em className="not-italic onyx-signal">field</em>.</span>}
         description="Sorted insights from every client under your roof — surfaced before they need to ask."
+      />
+
+      <QuickActions
+        items={[
+          {
+            href: "/dashboard/clients",
+            eyebrow: "Roster",
+            title: "Add an athlete",
+            description: "Invite a new client and they'll get a guided onboarding flow.",
+            icon: UserPlus,
+            primary: true,
+          },
+          {
+            href: "/dashboard/forge",
+            eyebrow: "Programming",
+            title: "Build a program",
+            description: "Drag-and-drop blocks, weeks and exercises into a fresh template.",
+            icon: Hammer,
+          },
+          {
+            href: "/dashboard/form-checks",
+            eyebrow: "Form Studio",
+            title: "Review a clip",
+            description: "Annotate technique videos and ship a voice memo back.",
+            icon: ScanLine,
+          },
+        ]}
       />
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 onyx-stagger">

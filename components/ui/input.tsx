@@ -7,7 +7,8 @@ export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttribute
       ref={ref}
       className={cn(
         "h-11 w-full bg-transparent border-b border-onyx-line text-onyx-bone placeholder:text-onyx-dim",
-        "px-0 focus:outline-none focus:border-onyx-amber transition-colors",
+        "px-0 focus:outline-none focus:border-onyx-amber",
+        "transition-[border-color,color] duration-200 ease-onyx-out",
         "text-[14px]",
         className,
       )}
@@ -25,7 +26,7 @@ export const Textarea = React.forwardRef<
     ref={ref}
     className={cn(
       "w-full bg-transparent border border-onyx-line text-onyx-bone placeholder:text-onyx-dim",
-      "p-3 focus:outline-none focus:border-onyx-amber transition-colors text-[14px]",
+      "p-3 focus:outline-none focus:border-onyx-amber transition-[border-color] duration-200 ease-onyx-out text-[14px]",
       className,
     )}
     {...props}

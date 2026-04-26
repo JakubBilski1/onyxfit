@@ -652,7 +652,7 @@ function DayCard({
   onRemoveRow: (blockId: string, rowId: string) => void;
 }) {
   return (
-    <div className="border border-onyx-line bg-[#0e0e0e] p-4 space-y-3">
+    <div className="border border-onyx-line bg-onyx-surface p-4 space-y-3">
       <div className="flex items-center gap-2">
         <input
           value={day.name}
@@ -771,7 +771,7 @@ function BlockCard({
       }}
       className={`border ${
         over ? "border-onyx-amber bg-onyx-amber/5" : "border-onyx-line"
-      } bg-[#0a0a0a] p-3 transition-colors`}
+      } bg-onyx-bg p-3 transition-colors`}
     >
       <div
         draggable
