@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
@@ -16,7 +16,6 @@ export default function LoginPage() {
 }
 
 function LoginForm() {
-  const router = useRouter();
   const search = useSearchParams();
   const next = search.get("next") ?? "/dashboard";
   const [email, setEmail] = useState("");
@@ -30,13 +29,15 @@ function LoginForm() {
     setError(null);
     const supabase = getSupabaseBrowser();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setBusy(false);
     if (error) {
+      setBusy(false);
       setError(error.message);
       return;
     }
-    router.push(next);
-    router.refresh();
+    // Hard navigate so the middleware sees the freshly-set auth cookies on
+    // the very next request — router.push + refresh occasionally races and
+    // the user ends up still on /login.
+    window.location.assign(next);
   }
 
   return (
