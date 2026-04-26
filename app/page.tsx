@@ -461,6 +461,12 @@ function Nav() {
       </nav>
       <div className="flex items-center gap-2">
         <ThemeToggle />
+        <a
+          href="/login"
+          className="hidden md:inline-flex items-center text-sm text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white transition-colors px-3"
+        >
+          Coach login →
+        </a>
         <Button
           size="sm"
           variant="outline"
