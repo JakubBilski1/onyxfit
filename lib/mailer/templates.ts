@@ -94,6 +94,39 @@ export function kycRejectedEmail(args: {
   };
 }
 
+export function broadcastEmail(args: {
+  to: string | string[];
+  title: string;
+  body: string;
+  audience: string;
+}): MailMessage {
+  const audienceLabel = args.audience.replace(/_/g, " ");
+  const bodyHtml = escapeHtml(args.body)
+    .split(/\n{2,}/)
+    .map((p) => `<p style="margin:0 0 16px;">${p.replace(/\n/g, "<br/>")}</p>`)
+    .join("");
+  return {
+    to: args.to,
+    subject: args.title,
+    text: [
+      args.body,
+      "",
+      "—",
+      "Onyx Coach · Forged in iron.",
+      `(Sent to: ${audienceLabel})`,
+    ].join("\n"),
+    html: wrap(
+      escapeHtml(args.title),
+      `
+      ${bodyHtml}
+      <p style="font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#666;margin-top:32px;">
+        Sent to: ${escapeHtml(audienceLabel)}
+      </p>
+      `,
+    ),
+  };
+}
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, "&amp;")

@@ -1,8 +1,10 @@
 import { getCurrentUser } from "@/lib/auth";
+import { getLatestBroadcastFor } from "@/lib/broadcasts";
 import { PageHeader } from "@/components/onyx/page-header";
 import { StatCard } from "@/components/onyx/stat-card";
 import { FlagTile } from "@/components/onyx/flag-tile";
 import { QuickActions } from "@/components/onyx/quick-actions";
+import { BroadcastBanner } from "@/components/onyx/broadcast-banner";
 import {
   OnboardingChecklist,
   buildCoachChecklist,
@@ -35,6 +37,7 @@ export default async function TriagePage() {
     { count: clientCount },
     { count: programCount },
     { data: cp },
+    latestBroadcast,
   ] = await Promise.all([
     supabase
       .from("triage_flags")
@@ -81,6 +84,7 @@ export default async function TriagePage() {
       )
       .eq("id", user.id)
       .maybeSingle(),
+    getLatestBroadcastFor("active_coach"),
   ]);
 
   const redCount = redFlags?.length ?? 0;
@@ -97,6 +101,8 @@ export default async function TriagePage() {
 
   return (
     <div className="space-y-10 onyx-enter">
+      <BroadcastBanner broadcast={latestBroadcast} />
+
       {/* Setup checklist — replaces first-run hero, hides automatically when 5/5 */}
       {!checklistComplete && <OnboardingChecklist steps={checklist} />}
 

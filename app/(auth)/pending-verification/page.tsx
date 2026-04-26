@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
 import { getSupabaseServer } from "@/lib/supabase/server";
+import { getLatestBroadcastFor } from "@/lib/broadcasts";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { BroadcastBanner } from "@/components/onyx/broadcast-banner";
 import { KycForm } from "./kyc-form";
 
 export const dynamic = "force-dynamic";
@@ -23,9 +25,11 @@ export default async function PendingVerificationPage() {
   }
 
   const status = profile.verification_status;
+  const latestBroadcast = await getLatestBroadcastFor("pending_coach");
 
   return (
-    <div className="onyx-stagger">
+    <div className="onyx-stagger space-y-6">
+      <BroadcastBanner broadcast={latestBroadcast} />
       <span className="onyx-label">Status · {status?.toUpperCase()}</span>
       <h1 className="onyx-display text-5xl text-onyx-bone mt-3">
         {status === "under_review"
