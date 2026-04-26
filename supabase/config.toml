@@ -1,0 +1,6 @@
+# Supabase project config — only the fields we actually use.
+# The rest are managed in the dashboard.
+project_id = "rzpbjtjpinxufygpwhuo"
+
+[functions.coach-kyc-submit]
+verify_jwt = true
