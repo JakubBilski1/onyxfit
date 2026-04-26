@@ -4,9 +4,9 @@ import { PageHeader } from "@/components/onyx/page-header";
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/onyx/empty-state";
 import { formatDate } from "@/lib/utils";
+import { InviteClient } from "./invite-client";
 
 export const dynamic = "force-dynamic";
 
@@ -38,14 +38,14 @@ export default async function ClientsPage() {
         eyebrow="THE ROSTER"
         title={<span>Your <em className="not-italic onyx-signal">athletes</em>.</span>}
         description="Each row carries a human story — onboarding, training history, and the shape of their progress."
-        action={<Button variant="signal" size="md">+ New client</Button>}
+        action={<InviteClient />}
       />
 
       {rows.length === 0 ? (
         <EmptyState
           title="No clients yet."
           description="Invite your first athlete and the roster will populate. They'll receive an onboarding link with the medical questionnaire, injury history, and consent forms."
-          action={<Button variant="signal">+ Invite athlete</Button>}
+          action={<InviteClient label="+ Invite athlete" />}
         />
       ) : (
         <Card>
