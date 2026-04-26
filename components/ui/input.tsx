@@ -1,38 +1,40 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
-  ({ className, ...props }, ref) => (
-    <input
-      ref={ref}
-      className={cn(
-        "h-11 w-full bg-transparent border-b border-onyx-line text-onyx-bone placeholder:text-onyx-dim",
-        "px-0 focus:outline-none focus:border-onyx-amber",
-        "transition-[border-color,color] duration-200 ease-onyx-out",
-        "text-[14px]",
-        className,
-      )}
-      {...props}
-    />
-  ),
-);
+const fieldBase = [
+  "w-full text-[14px] text-fg placeholder:text-fg-3",
+  "bg-card border border-line rounded-md",
+  "px-3.5 py-2.5",
+  "transition-[border-color,box-shadow,background] duration-200 ease-out-expo",
+  "focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-card-2",
+  "disabled:opacity-50",
+].join(" ");
+
+export const Input = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement>
+>(({ className, ...props }, ref) => (
+  <input ref={ref} className={cn(fieldBase, "h-11", className)} {...props} />
+));
 Input.displayName = "Input";
 
 export const Textarea = React.forwardRef<
   HTMLTextAreaElement,
   React.TextareaHTMLAttributes<HTMLTextAreaElement>
 >(({ className, ...props }, ref) => (
-  <textarea
-    ref={ref}
-    className={cn(
-      "w-full bg-transparent border border-onyx-line text-onyx-bone placeholder:text-onyx-dim",
-      "p-3 focus:outline-none focus:border-onyx-amber transition-[border-color] duration-200 ease-onyx-out text-[14px]",
-      className,
-    )}
-    {...props}
-  />
+  <textarea ref={ref} className={cn(fieldBase, "min-h-[88px]", className)} {...props} />
 ));
 Textarea.displayName = "Textarea";
+
+export const Select = React.forwardRef<
+  HTMLSelectElement,
+  React.SelectHTMLAttributes<HTMLSelectElement>
+>(({ className, children, ...props }, ref) => (
+  <select ref={ref} className={cn(fieldBase, "h-11 pr-8 cursor-pointer", className)} {...props}>
+    {children}
+  </select>
+));
+Select.displayName = "Select";
 
 export const Label = ({
   children,
@@ -43,7 +45,10 @@ export const Label = ({
   htmlFor?: string;
   className?: string;
 }) => (
-  <label htmlFor={htmlFor} className={cn("onyx-label block mb-2", className)}>
+  <label
+    htmlFor={htmlFor}
+    className={cn("block text-[12.5px] font-medium text-fg-2 mb-1.5", className)}
+  >
     {children}
   </label>
 );

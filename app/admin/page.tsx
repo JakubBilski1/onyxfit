@@ -4,6 +4,7 @@ import { StatCard } from "@/components/onyx/stat-card";
 import { Card, CardHeader, CardTitle, CardBody } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrencyCents, formatDate } from "@/lib/utils";
+import { Banknote, Users, AlertTriangle, Coins } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -34,35 +35,43 @@ export default async function AdminFinancialCommandCenter() {
   const platformCutCents = Math.round((k.mrr_cents ?? 0) * 0.10);
 
   return (
-    <div className="space-y-12 onyx-enter">
+    <div className="space-y-10 onyx-enter">
       <PageHeader
-        eyebrow="GOD MODE"
-        title={<span>The <em className="not-italic onyx-signal">platform</em>, at a glance.</span>}
+        eyebrow="God mode"
+        title={<>The <span className="text-gradient-brand">platform</span>, at a glance.</>}
         description="Monthly recurring revenue, platform commission, dispute load, and the verification queue — all live."
       />
 
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 onyx-stagger">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 onyx-stagger">
         <StatCard
           label="MRR"
           value={formatCurrencyCents(k.mrr_cents ?? 0).replace(/\.00$/, "")}
           hint={`${k.active_subscriptions ?? 0} active subscriptions`}
           trend={{ direction: "up", value: "live" }}
+          tone="primary"
+          icon={<Banknote size={15} strokeWidth={1.8} />}
         />
         <StatCard
           label="Platform cut · 10%"
           value={formatCurrencyCents(platformCutCents).replace(/\.00$/, "")}
           hint="Onyx commission · monthly run-rate"
+          tone="violet"
+          icon={<Coins size={15} strokeWidth={1.8} />}
         />
         <StatCard
           label="Active coaches"
           value={String(k.active_coaches ?? 0).padStart(2, "0")}
           hint={`${k.pending_coaches ?? 0} awaiting verification`}
+          tone="emerald"
+          icon={<Users size={15} strokeWidth={1.8} />}
         />
         <StatCard
           label="Disputes · open"
           value={String(k.open_disputes ?? 0).padStart(2, "0")}
           hint={(k.open_disputes ?? 0) > 0 ? "Action required" : "Nothing on the table"}
           trend={(k.open_disputes ?? 0) > 0 ? { direction: "down", value: "review" } : undefined}
+          tone={(k.open_disputes ?? 0) > 0 ? "rose" : "neutral"}
+          icon={<AlertTriangle size={15} strokeWidth={1.8} />}
         />
       </section>
 
@@ -123,29 +132,42 @@ export default async function AdminFinancialCommandCenter() {
       </section>
 
       <section>
-        <div className="flex items-end justify-between mb-6">
-          <div>
-            <span className="onyx-label">Section · 03</span>
-            <h2 className="onyx-display text-4xl mt-2 text-onyx-bone">Platform health.</h2>
-          </div>
-          <span className="font-mono text-[10px] text-onyx-dim">DAU · MAU · CHURN · HEATMAP</span>
+        <div className="flex items-end justify-between mb-5">
+          <h2 className="text-[20px] font-semibold tracking-tight text-fg">
+            Platform health
+          </h2>
+          <span className="text-[10.5px] font-mono uppercase tracking-[0.22em] text-fg-3">
+            DAU · MAU · churn
+          </span>
         </div>
         <Card>
-          <div className="grid grid-cols-1 md:grid-cols-3">
-            <div className="border-r border-onyx-line p-8">
-              <span className="onyx-label">DAU / MAU</span>
-              <div className="onyx-display text-[64px] mt-2 text-onyx-bone leading-none">0.42</div>
-              <div className="font-mono text-[11px] text-onyx-dim mt-2">stickiness ratio · last 30d</div>
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-line">
+            <div className="p-7">
+              <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-fg-3">
+                DAU / MAU
+              </span>
+              <div className="text-[48px] font-semibold tracking-tight text-fg mt-2 leading-none tabular-nums">
+                0.42
+              </div>
+              <div className="text-[12px] text-fg-2 mt-2">stickiness ratio · last 30d</div>
             </div>
-            <div className="border-r border-onyx-line p-8">
-              <span className="onyx-label">Coach churn · 30d</span>
-              <div className="onyx-display text-[64px] mt-2 text-onyx-bone leading-none">2.1<span className="text-[28px] text-onyx-mute">%</span></div>
-              <div className="font-mono text-[11px] text-onyx-dim mt-2">target ≤ 3% · within range</div>
+            <div className="p-7">
+              <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-fg-3">
+                Coach churn · 30d
+              </span>
+              <div className="text-[48px] font-semibold tracking-tight text-fg mt-2 leading-none tabular-nums">
+                2.1<span className="text-[24px] text-fg-3">%</span>
+              </div>
+              <div className="text-[12px] text-fg-2 mt-2">target ≤ 3% · within range</div>
             </div>
-            <div className="p-8">
-              <span className="onyx-label">Total clients</span>
-              <div className="onyx-display text-[64px] mt-2 text-onyx-bone leading-none">{(k.total_clients ?? 0).toLocaleString()}</div>
-              <div className="font-mono text-[11px] text-onyx-dim mt-2">across the platform</div>
+            <div className="p-7">
+              <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-fg-3">
+                Total clients
+              </span>
+              <div className="text-[48px] font-semibold tracking-tight text-fg mt-2 leading-none tabular-nums">
+                {(k.total_clients ?? 0).toLocaleString()}
+              </div>
+              <div className="text-[12px] text-fg-2 mt-2">across the platform</div>
             </div>
           </div>
         </Card>

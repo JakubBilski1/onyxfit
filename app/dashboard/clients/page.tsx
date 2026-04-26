@@ -32,10 +32,10 @@ export default async function ClientsPage() {
   const rows = links ?? [];
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10 onyx-enter">
       <PageHeader
-        eyebrow="THE ROSTER"
-        title={<span>Your <em className="not-italic onyx-signal">athletes</em>.</span>}
+        eyebrow="The roster"
+        title={<>Your <span className="text-gradient-brand">athletes</span>.</>}
         description="Each row carries a human story — onboarding, training history, and the shape of their progress."
         action={<InviteClient />}
       />
@@ -57,12 +57,12 @@ export default async function ClientsPage() {
           <ul className="divide-y divide-onyx-line">
             {rows.map((r: any) => (
               <li key={r.client.id}>
-                <Link href={`/dashboard/clients/${r.client.id}`} className="grid grid-cols-12 gap-4 px-6 py-5 items-center hover:bg-white/[0.02] transition-colors">
+                <Link href={`/dashboard/clients/${r.client.id}`} className="grid grid-cols-12 gap-4 px-6 py-4 items-center hover:bg-fg/[.03] transition-colors group">
                   <div className="col-span-5 flex items-center gap-4 min-w-0">
-                    <Avatar name={r.client.full_name} src={r.client.avatar_url} />
+                    <Avatar name={r.client.full_name} src={r.client.avatar_url} size={40} />
                     <div className="min-w-0">
-                      <div className="text-[14px] text-onyx-bone truncate">{r.client.full_name}</div>
-                      <div className="text-[12px] text-onyx-dim font-mono truncate">{r.client.email ?? "no email"}</div>
+                      <div className="text-[14px] font-medium text-fg truncate group-hover:text-primary transition-colors">{r.client.full_name}</div>
+                      <div className="text-[12px] text-fg-3 truncate">{r.client.email ?? "no email"}</div>
                     </div>
                   </div>
                   <div className="col-span-3">

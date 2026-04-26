@@ -14,8 +14,6 @@ function readTheme(): Theme {
 }
 
 export function ThemeToggle() {
-  // Initialise from the actual DOM so SSR markup matches the inline-script
-  // boot. Avoids a flash-of-wrong-icon on first paint.
   const [theme, setTheme] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
@@ -36,30 +34,38 @@ export function ThemeToggle() {
     }
   }
 
-  // Render a stable shell on first paint to avoid hydration mismatches; once
-  // mounted, swap the real icon in.
   return (
     <button
       type="button"
       onClick={toggle}
       aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
       title={theme === "dark" ? "Light mode" : "Dark mode"}
-      className={[
-        "relative h-8 w-8 inline-flex items-center justify-center",
-        "border border-onyx-line text-onyx-mute hover:text-onyx-amber hover:border-onyx-amber",
-        "transition-[color,border-color,transform] duration-200 ease-onyx-out",
-        "active:scale-90 rounded-full",
-      ].join(" ")}
+      className="relative inline-flex items-center justify-center h-9 w-9 rounded-full text-fg-2 hover:text-primary hover:bg-fg/[.05] transition-colors active:scale-90 duration-150"
     >
-      {mounted ? (
-        theme === "dark" ? (
-          <Sun size={14} strokeWidth={1.6} className="onyx-enter" />
-        ) : (
-          <Moon size={14} strokeWidth={1.6} className="onyx-enter" />
-        )
-      ) : (
-        <span className="block h-3.5 w-3.5" />
-      )}
+      <span className="relative h-4 w-4">
+        {mounted && (
+          <>
+            <Sun
+              size={16}
+              strokeWidth={1.8}
+              className={`absolute inset-0 transition-all duration-300 ease-out-expo ${
+                theme === "dark"
+                  ? "opacity-100 rotate-0 scale-100"
+                  : "opacity-0 rotate-90 scale-50"
+              }`}
+            />
+            <Moon
+              size={16}
+              strokeWidth={1.8}
+              className={`absolute inset-0 transition-all duration-300 ease-out-expo ${
+                theme === "light"
+                  ? "opacity-100 rotate-0 scale-100"
+                  : "opacity-0 -rotate-90 scale-50"
+              }`}
+            />
+          </>
+        )}
+      </span>
     </button>
   );
 }
