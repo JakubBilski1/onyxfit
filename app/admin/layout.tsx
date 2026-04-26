@@ -1,19 +1,11 @@
 import { redirect } from "next/navigation";
-import { getSupabaseServer } from "@/lib/supabase/server";
+import { getCurrentProfile } from "@/lib/auth";
 import { Sidebar } from "@/components/onyx/sidebar";
 import { Topbar } from "@/components/onyx/topbar";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const supabase = getSupabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { user, profile } = await getCurrentProfile();
   if (!user) redirect("/login");
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("id, role, full_name, email")
-    .eq("id", user.id)
-    .maybeSingle();
-
   if (!profile || profile.role !== "admin") redirect("/dashboard");
 
   return (

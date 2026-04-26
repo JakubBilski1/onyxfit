@@ -1,22 +1,16 @@
 import { redirect } from "next/navigation";
-import { getSupabaseServer } from "@/lib/supabase/server";
+import { getCurrentProfile } from "@/lib/auth";
 import { Sidebar } from "@/components/onyx/sidebar";
 import { Topbar } from "@/components/onyx/topbar";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const supabase = getSupabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { user, profile } = await getCurrentProfile();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("id, role, verification_status, full_name, email")
-    .eq("id", user.id)
-    .maybeSingle();
-
   if (!profile) redirect("/login");
+  if (profile.role === "admin") redirect("/admin");
   if (profile.role === "coach" && profile.verification_status !== "active") redirect("/pending-verification");
-  if (profile.role !== "coach" && profile.role !== "admin") redirect("/login");
+  if (profile.role !== "coach") redirect("/login");
 
   return (
     <div className="onyx-shell min-h-screen flex">

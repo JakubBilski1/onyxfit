@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSupabaseServer } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/auth";
 import { PageHeader } from "@/components/onyx/page-header";
 import { Badge } from "@/components/ui/badge";
 import { ForgeEditor } from "./forge-editor";
@@ -17,8 +17,7 @@ export default async function ProgramDetailPage({
 }: {
   params: { id: string };
 }) {
-  const supabase = getSupabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { supabase, user } = await getCurrentUser();
   if (!user) return null;
 
   const [{ data: program }, { data: exercises }, { data: links }] = await Promise.all([

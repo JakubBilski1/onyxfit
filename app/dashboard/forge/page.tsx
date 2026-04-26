@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getSupabaseServer } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/auth";
 import { PageHeader } from "@/components/onyx/page-header";
 import { Card, CardHeader, CardTitle, CardBody } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,8 +11,7 @@ import { AddCustomExercise } from "./add-custom-exercise";
 export const dynamic = "force-dynamic";
 
 export default async function ForgePage() {
-  const supabase = getSupabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { supabase, user } = await getCurrentUser();
   if (!user) return null;
 
   const [{ data: programs }, { data: templates }, { data: customExercises }] =

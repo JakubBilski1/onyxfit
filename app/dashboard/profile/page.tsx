@@ -1,4 +1,4 @@
-import { getSupabaseServer } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/auth";
 import { PageHeader } from "@/components/onyx/page-header";
 import { Card, CardHeader, CardTitle, CardBody } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
@@ -13,8 +13,7 @@ import type { Achievement } from "./actions";
 export const dynamic = "force-dynamic";
 
 export default async function ProfilePage() {
-  const supabase = getSupabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { supabase, user } = await getCurrentUser();
   if (!user) return null;
 
   const [{ data: prof }, { data: cp }] = await Promise.all([

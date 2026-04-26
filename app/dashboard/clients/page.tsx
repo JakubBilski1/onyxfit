@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getSupabaseServer } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/auth";
 import { PageHeader } from "@/components/onyx/page-header";
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
@@ -19,8 +19,7 @@ const STEP_LABEL: Record<string, string> = {
 };
 
 export default async function ClientsPage() {
-  const supabase = getSupabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { supabase, user } = await getCurrentUser();
   if (!user) return null;
 
   const { data: links } = await supabase

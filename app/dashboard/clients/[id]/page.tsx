@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSupabaseServer } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/auth";
 import { PageHeader } from "@/components/onyx/page-header";
 import { StatCard } from "@/components/onyx/stat-card";
 import { FlagTile } from "@/components/onyx/flag-tile";
@@ -28,8 +28,7 @@ export default async function ClientDetailPage({
 }: {
   params: { id: string };
 }) {
-  const supabase = getSupabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { supabase, user } = await getCurrentUser();
   if (!user) return null;
 
   // Verify the link first — RLS would also enforce, but a clean 404 is nicer
