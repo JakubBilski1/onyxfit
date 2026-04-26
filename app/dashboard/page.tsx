@@ -3,6 +3,10 @@ import { PageHeader } from "@/components/onyx/page-header";
 import { StatCard } from "@/components/onyx/stat-card";
 import { FlagTile } from "@/components/onyx/flag-tile";
 import { QuickActions } from "@/components/onyx/quick-actions";
+import {
+  OnboardingChecklist,
+  buildCoachChecklist,
+} from "@/components/onyx/onboarding-checklist";
 import { Card, CardHeader, CardTitle, CardBody } from "@/components/ui/card";
 import { EmptyState } from "@/components/onyx/empty-state";
 import { Avatar } from "@/components/ui/avatar";
@@ -29,6 +33,8 @@ export default async function TriagePage() {
     { data: greenFlags },
     { data: feed },
     { count: clientCount },
+    { count: programCount },
+    { data: cp },
   ] = await Promise.all([
     supabase
       .from("triage_flags")
@@ -64,6 +70,17 @@ export default async function TriagePage() {
       .select("client_id", { count: "exact", head: true })
       .eq("coach_id", user.id)
       .eq("active", true),
+    supabase
+      .from("programs")
+      .select("id", { count: "exact", head: true })
+      .eq("coach_id", user.id),
+    supabase
+      .from("coach_profiles")
+      .select(
+        "slug, bio, avatar_url, specializations, monthly_rate_cents, is_public",
+      )
+      .eq("id", user.id)
+      .maybeSingle(),
   ]);
 
   const redCount = redFlags?.length ?? 0;
@@ -71,87 +88,31 @@ export default async function TriagePage() {
   const activityCount = feed?.length ?? 0;
   const totalClients = clientCount ?? 0;
 
-  // First-run hero — coach with zero athletes gets a different welcome
-  if (totalClients === 0) {
-    return (
-      <div className="space-y-10 onyx-enter">
-        <div className="onyx-aurora rounded-2xl border border-line bg-card overflow-hidden p-10 md:p-14">
-          <span className="inline-flex items-center gap-2 text-[10.5px] font-mono uppercase tracking-[0.22em] text-fg-3 mb-5">
-            <span className="block h-1 w-1 rounded-full bg-primary" />
-            Welcome to Onyx
-          </span>
-          <h1 className="text-[clamp(32px,5vw,52px)] font-semibold tracking-tight text-fg leading-[1.05] max-w-3xl">
-            Your coaching console is{" "}
-            <span className="text-gradient-brand">ready</span>. Let&apos;s bring
-            in your first athlete.
-          </h1>
-          <p className="mt-4 text-[15px] text-fg-2 leading-relaxed max-w-xl">
-            Invite a client and they&apos;ll get a guided onboarding flow —
-            medical questionnaire, injury history and consent — all in one link.
-          </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <a
-              href="/dashboard/clients"
-              className="inline-flex items-center gap-2 h-12 px-6 rounded-md bg-primary text-primary-fg text-[14px] font-semibold shadow-soft hover:shadow-glow-primary hover:brightness-[1.04] transition-all duration-200 ease-out-expo active:scale-[0.97]"
-            >
-              <UserPlus size={16} strokeWidth={2} />
-              Invite first athlete
-            </a>
-            <a
-              href="/dashboard/forge"
-              className="inline-flex items-center gap-2 h-12 px-6 rounded-md border border-line-strong text-fg hover:border-primary hover:text-primary transition-colors duration-200"
-            >
-              <Hammer size={16} strokeWidth={1.6} />
-              Build a program first
-            </a>
-          </div>
-        </div>
-
-        <QuickActions
-          items={[
-            {
-              href: "/dashboard/clients",
-              eyebrow: "Roster",
-              title: "Add an athlete",
-              description: "Send an invite link with full medical onboarding baked in.",
-              icon: UserPlus,
-              tone: "primary",
-              primary: true,
-            },
-            {
-              href: "/dashboard/forge",
-              eyebrow: "Programming",
-              title: "Build a program",
-              description: "Drag-and-drop weeks, days, and exercises into a template.",
-              icon: Hammer,
-              tone: "violet",
-            },
-            {
-              href: "/admin/exercises",
-              eyebrow: "Library",
-              title: "Browse the catalog",
-              description: "140+ canonical exercises, ready to drop into any program.",
-              icon: Sparkles,
-              tone: "emerald",
-            },
-          ]}
-        />
-      </div>
-    );
-  }
+  const checklist = buildCoachChecklist({
+    cp: cp ?? null,
+    programCount: programCount ?? 0,
+    clientCount: totalClients,
+  });
+  const checklistComplete = checklist.every((s) => s.done);
 
   return (
     <div className="space-y-10 onyx-enter">
-      <PageHeader
-        eyebrow="Today's field"
-        title={
-          <>
-            Triage,{" "}
-            <span className="text-gradient-brand">at a glance</span>.
-          </>
-        }
-        description="Sorted insights from every athlete under your roof — surfaced before they need to ask."
-      />
+      {/* Setup checklist — replaces first-run hero, hides automatically when 5/5 */}
+      {!checklistComplete && <OnboardingChecklist steps={checklist} />}
+
+      {/* Page header — always shown after the checklist (or first when complete) */}
+      {checklistComplete && (
+        <PageHeader
+          eyebrow="Today's field"
+          title={
+            <>
+              Triage,{" "}
+              <span className="text-gradient-brand">at a glance</span>.
+            </>
+          }
+          description="Sorted insights from every athlete under your roof — surfaced before they need to ask."
+        />
+      )}
 
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 onyx-stagger">
         <StatCard
@@ -186,34 +147,38 @@ export default async function TriagePage() {
         />
       </section>
 
-      <QuickActions
-        items={[
-          {
-            href: "/dashboard/clients",
-            eyebrow: "Roster",
-            title: "Invite an athlete",
-            description: "Send a guided onboarding link — medical, injury, consent.",
-            icon: UserPlus,
-            tone: "primary",
-          },
-          {
-            href: "/dashboard/forge",
-            eyebrow: "Programming",
-            title: "Open the Forge",
-            description: "Build or assign a program in seconds.",
-            icon: Hammer,
-            tone: "violet",
-          },
-          {
-            href: "/dashboard/form-checks",
-            eyebrow: "Form Studio",
-            title: "Review a clip",
-            description: "Annotate technique videos and ship a voice memo.",
-            icon: ScanLine,
-            tone: "emerald",
-          },
-        ]}
-      />
+      {/* Quick actions only shown once setup is done — otherwise the checklist
+          IS the primary action. */}
+      {checklistComplete && (
+        <QuickActions
+          items={[
+            {
+              href: "/dashboard/clients",
+              eyebrow: "Roster",
+              title: "Invite an athlete",
+              description: "Send a guided onboarding link — medical, injury, consent.",
+              icon: UserPlus,
+              tone: "primary",
+            },
+            {
+              href: "/dashboard/forge",
+              eyebrow: "Programming",
+              title: "Open the Forge",
+              description: "Build or assign a program in seconds.",
+              icon: Hammer,
+              tone: "violet",
+            },
+            {
+              href: "/dashboard/form-checks",
+              eyebrow: "Form Studio",
+              title: "Review a clip",
+              description: "Annotate technique videos and ship a voice memo.",
+              icon: ScanLine,
+              tone: "emerald",
+            },
+          ]}
+        />
+      )}
 
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-5">
