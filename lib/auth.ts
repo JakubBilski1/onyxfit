@@ -45,6 +45,11 @@ export async function requireActiveCoach() {
     .select("role, verification_status")
     .eq("id", user.id)
     .maybeSingle();
+
+  // Admins use /admin, never the trainer dashboard.
+  if (profile?.role === "admin") {
+    redirect("/admin");
+  }
   if (profile?.role !== "coach" || profile.verification_status !== "active") {
     console.error("[requireActiveCoach] gate failed", {
       role: profile?.role,

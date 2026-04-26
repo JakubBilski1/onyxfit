@@ -49,12 +49,18 @@ export async function updateSession(request: NextRequest) {
       .eq("id", user.id)
       .maybeSingle();
 
+    // Admins are not coaches — bounce them straight to their own panel.
+    if (profile?.role === "admin") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin";
+      return NextResponse.redirect(url);
+    }
     if (profile?.role === "coach" && profile.verification_status !== "active") {
       const url = request.nextUrl.clone();
       url.pathname = "/pending-verification";
       return NextResponse.redirect(url);
     }
-    if (profile?.role !== "coach" && profile?.role !== "admin" && path.startsWith("/dashboard")) {
+    if (profile?.role !== "coach") {
       const url = request.nextUrl.clone();
       url.pathname = "/login";
       return NextResponse.redirect(url);
