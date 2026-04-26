@@ -1,9 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
+import {
+  readRememberFromDocument,
+  writeRememberPreference,
+} from "@/lib/supabase/cookie-policy";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 
@@ -20,13 +24,23 @@ function LoginForm() {
   const next = search.get("next") ?? "/dashboard";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  // Restore last-used preference so the checkbox state matches what's on the
+  // wire. Defaults to checked for first-time visitors.
+  useEffect(() => {
+    setRemember(readRememberFromDocument());
+  }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     setError(null);
+    // Persist the preference BEFORE constructing the supabase client, since
+    // createBrowserClient bakes cookieOptions in at construction time.
+    writeRememberPreference(remember);
     const supabase = getSupabaseBrowser();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
@@ -71,6 +85,17 @@ function LoginForm() {
             placeholder="••••••••"
           />
         </div>
+        <label className="flex items-center gap-3 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={remember}
+            onChange={(e) => setRemember(e.target.checked)}
+            className="h-4 w-4 accent-onyx-amber bg-transparent border border-onyx-line"
+          />
+          <span className="text-[12px] text-onyx-mute">
+            Remember me <span className="text-onyx-dim">— stay signed in for 7 days on this device</span>
+          </span>
+        </label>
         {error && <p className="text-[12px] text-onyx-red font-mono">{error}</p>}
         <Button type="submit" variant="signal" size="lg" disabled={busy} className="w-full">
           {busy ? "Signing in…" : "Continue →"}

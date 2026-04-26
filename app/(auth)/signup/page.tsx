@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
+import { writeRememberPreference } from "@/lib/supabase/cookie-policy";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 
@@ -17,6 +18,9 @@ export default function SignupPage() {
     e.preventDefault();
     setBusy(true);
     setError(null);
+    // New accounts default to persistent (7-day) sessions — they can opt out
+    // by signing out and ticking off "Remember me" on next login.
+    writeRememberPreference(true);
     const supabase = getSupabaseBrowser();
     const { error } = await supabase.auth.signUp({
       email,

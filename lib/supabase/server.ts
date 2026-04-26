@@ -1,12 +1,15 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { authCookieOptions, readRememberPreference } from "./cookie-policy";
 
 export function getSupabaseServer() {
   const cookieStore = cookies();
+  const remember = readRememberPreference(cookieStore.getAll());
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      cookieOptions: authCookieOptions(remember),
       cookies: {
         getAll() {
           return cookieStore.getAll();
