@@ -2,7 +2,8 @@ import Link from "next/link";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { CommandPalette } from "./command-palette";
 import { ThemeToggle } from "./theme-toggle";
-import { Bell, ArrowUpRight } from "lucide-react";
+import { NotificationsBell } from "./notifications-bell";
+import { ArrowUpRight } from "lucide-react";
 
 export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
   const supabase = getSupabaseServer();
@@ -10,27 +11,62 @@ export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let redCount = 0;
   let clients: { id: string; full_name: string }[] = [];
-  if (user && scope === "coach") {
-    const [{ count }, { data: links }] = await Promise.all([
-      supabase
-        .from("triage_flags")
-        .select("id", { count: "exact", head: true })
-        .eq("kind", "red")
-        .eq("resolved", false),
-      supabase
-        .from("coaches_clients")
-        .select("client:clients(id, full_name)")
-        .eq("coach_id", user.id)
-        .eq("active", true)
-        .order("started_at", { ascending: false })
-        .limit(40),
-    ]);
-    redCount = count ?? 0;
-    clients = (links ?? [])
-      .map((l: any) => (Array.isArray(l.client) ? l.client[0] : l.client))
-      .filter(Boolean);
+  let initialBroadcasts: any[] = [];
+  let initialFlags: any[] = [];
+
+  if (user) {
+    // Audience filter for the bell — coach sees broadcasts targeted at them,
+    // admin sees everything (they're the senders).
+    const audiences =
+      scope === "coach"
+        ? ["all", "coaches", "active_coaches"]
+        : ["all", "coaches", "active_coaches", "pending_coaches", "clients"];
+
+    const broadcastsQ = supabase
+      .from("admin_broadcasts")
+      .select("id, title, body, audience, sent_at")
+      .in("audience", audiences)
+      .order("sent_at", { ascending: false })
+      .limit(10);
+
+    if (scope === "coach") {
+      const [{ data: links }, { data: broadcasts }, { data: flags }] =
+        await Promise.all([
+          supabase
+            .from("coaches_clients")
+            .select("client:clients(id, full_name)")
+            .eq("coach_id", user.id)
+            .eq("active", true)
+            .order("started_at", { ascending: false })
+            .limit(40),
+          broadcastsQ,
+          supabase
+            .from("triage_flags")
+            .select(
+              "id, title, detail, rule, created_at, client:clients(full_name)",
+            )
+            .eq("kind", "red")
+            .eq("resolved", false)
+            .order("created_at", { ascending: false })
+            .limit(10),
+        ]);
+      clients = (links ?? [])
+        .map((l: any) => (Array.isArray(l.client) ? l.client[0] : l.client))
+        .filter(Boolean);
+      initialBroadcasts = broadcasts ?? [];
+      initialFlags = (flags ?? []).map((f: any) => ({
+        id: f.id,
+        title: f.title,
+        detail: f.detail,
+        rule: f.rule,
+        created_at: f.created_at,
+        client_name: f.client?.full_name ?? null,
+      }));
+    } else {
+      const { data: broadcasts } = await broadcastsQ;
+      initialBroadcasts = broadcasts ?? [];
+    }
   }
 
   const today = new Date().toLocaleDateString("en-GB", {
@@ -38,6 +74,8 @@ export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
     day: "2-digit",
     month: "short",
   });
+
+  const bellScope = scope === "coach" ? "active_coach" : "admin";
 
   return (
     <header className="h-16 border-b border-line flex items-center justify-between px-6 lg:px-8 sticky top-0 z-30 bg-bg/85 backdrop-blur-xl">
@@ -54,22 +92,11 @@ export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
       <div className="flex items-center gap-2">
         <CommandPalette clients={clients} scope={scope} />
 
-        <Link
-          href="/dashboard"
-          className="relative inline-flex items-center justify-center h-9 w-9 rounded-full text-fg-2 hover:text-fg hover:bg-fg/[.05] transition-colors"
-          title={
-            redCount > 0
-              ? `${redCount} open red flag${redCount === 1 ? "" : "s"}`
-              : "All clear"
-          }
-        >
-          <Bell size={16} strokeWidth={1.6} />
-          {redCount > 0 && (
-            <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-rose text-white text-[10px] font-semibold flex items-center justify-center shadow-soft">
-              {redCount > 9 ? "9+" : redCount}
-            </span>
-          )}
-        </Link>
+        <NotificationsBell
+          scope={bellScope}
+          initialBroadcasts={initialBroadcasts}
+          initialFlags={initialFlags}
+        />
 
         <ThemeToggle />
 
