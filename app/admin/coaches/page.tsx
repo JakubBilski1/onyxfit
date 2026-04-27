@@ -23,7 +23,7 @@ export default async function CoachesPage() {
         description="Every coach the platform has approved, plus those still moving through verification."
       />
       <Card>
-        <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-onyx-line">
+        <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-onyx-line">
           <span className="onyx-label col-span-4">Coach</span>
           <span className="onyx-label col-span-3">Status</span>
           <span className="onyx-label col-span-2">Stripe</span>
@@ -32,15 +32,21 @@ export default async function CoachesPage() {
         </div>
         <ul className="divide-y divide-onyx-line">
           {(coaches ?? []).map((c: any) => (
-            <li key={c.id} className="grid grid-cols-12 gap-4 px-6 py-4 items-center">
-              <div className="col-span-4 flex items-center gap-3 min-w-0">
+            <li
+              key={c.id}
+              className="flex flex-col gap-3 px-4 py-4 sm:px-6 md:grid md:grid-cols-12 md:gap-4 md:items-center"
+            >
+              <div className="md:col-span-4 flex items-center gap-3 min-w-0">
                 <Avatar name={c.full_name} />
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <div className="text-[14px] text-onyx-bone truncate">{c.full_name ?? "Unnamed"}</div>
                   <div className="font-mono text-[11px] text-onyx-dim truncate">{c.email}</div>
                 </div>
+                <span className="md:hidden font-mono text-[10px] text-onyx-dim shrink-0">
+                  {c.coach_profile?.is_public ? "PUB" : "—"}
+                </span>
               </div>
-              <div className="col-span-3">
+              <div className="md:col-span-3 flex flex-wrap items-center gap-2 md:block">
                 <Badge
                   variant={
                     c.verification_status === "active"
@@ -52,12 +58,18 @@ export default async function CoachesPage() {
                 >
                   {c.verification_status}
                 </Badge>
+                <span className="md:hidden font-mono text-[11px] text-onyx-mute">
+                  {c.coach_profile?.stripe_charges_enabled ? "✓ Stripe" : "— No Stripe"}
+                </span>
+                <span className="md:hidden font-mono text-[11px] text-onyx-mute">
+                  · {formatDate(c.created_at)}
+                </span>
               </div>
-              <div className="col-span-2 font-mono text-[11px] text-onyx-mute">
+              <div className="hidden md:block md:col-span-2 font-mono text-[11px] text-onyx-mute">
                 {c.coach_profile?.stripe_charges_enabled ? "✓ Connected" : <span className="text-onyx-dim">— not linked</span>}
               </div>
-              <div className="col-span-2 font-mono text-[11px] text-onyx-mute">{formatDate(c.created_at)}</div>
-              <div className="col-span-1 text-right font-mono text-[10px] text-onyx-dim">
+              <div className="hidden md:block md:col-span-2 font-mono text-[11px] text-onyx-mute">{formatDate(c.created_at)}</div>
+              <div className="hidden md:block md:col-span-1 text-right font-mono text-[10px] text-onyx-dim">
                 {c.coach_profile?.is_public ? "PUB" : "—"}
               </div>
             </li>

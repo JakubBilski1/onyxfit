@@ -156,15 +156,17 @@ export default async function NutritionPage({
               {foods.map((f: any) => (
                 <li
                   key={f.id}
-                  className="grid grid-cols-12 gap-3 py-3 text-[12px] font-mono items-center"
+                  className="flex flex-col gap-1 py-3 text-[12px] font-mono md:grid md:grid-cols-12 md:gap-3 md:items-center"
                 >
-                  <span className="col-span-4 text-onyx-bone truncate">{f.name}</span>
-                  <span className="col-span-2 text-onyx-dim truncate">{f.brand ?? "—"}</span>
-                  <span className="col-span-1 text-onyx-bone">{f.kcal_per_100g}</span>
-                  <span className="col-span-1 text-onyx-mute">P {f.protein_per_100g}</span>
-                  <span className="col-span-1 text-onyx-mute">C {f.carbs_per_100g}</span>
-                  <span className="col-span-1 text-onyx-mute">F {f.fats_per_100g}</span>
-                  <span className="col-span-2 text-onyx-dim text-right">
+                  <span className="md:col-span-4 text-onyx-bone truncate">{f.name}</span>
+                  <span className="md:col-span-2 text-onyx-dim truncate">{f.brand ?? "—"}</span>
+                  <span className="md:col-span-1 text-onyx-bone md:text-left">
+                    <span className="md:hidden text-onyx-dim">kcal </span>{f.kcal_per_100g}
+                  </span>
+                  <span className="md:col-span-1 text-onyx-mute">P {f.protein_per_100g}</span>
+                  <span className="md:col-span-1 text-onyx-mute">C {f.carbs_per_100g}</span>
+                  <span className="md:col-span-1 text-onyx-mute">F {f.fats_per_100g}</span>
+                  <span className="md:col-span-2 text-onyx-dim md:text-right">
                     {formatDate(f.created_at)}
                   </span>
                 </li>

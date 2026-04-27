@@ -53,7 +53,7 @@ export default async function GlobalExerciseDbPage({
       <AddExerciseForm />
 
       <form className="flex flex-wrap gap-3 items-end" method="get">
-        <div className="flex-1 min-w-[240px]">
+        <div className="flex-1 min-w-0 sm:min-w-[240px]">
           <label className="onyx-label" htmlFor="q">Search</label>
           <input
             id="q"
@@ -63,7 +63,7 @@ export default async function GlobalExerciseDbPage({
             className="w-full bg-transparent border border-onyx-line px-3 py-2 text-[13px] text-onyx-bone focus:outline-none focus:border-onyx-amber"
           />
         </div>
-        <div className="min-w-[180px]">
+        <div className="flex-1 min-w-0 sm:min-w-[180px]">
           <label className="onyx-label" htmlFor="muscle">Primary muscle</label>
           <input
             id="muscle"
@@ -90,7 +90,7 @@ export default async function GlobalExerciseDbPage({
       </form>
 
       <Card>
-        <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-onyx-line">
+        <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-onyx-line">
           <span className="onyx-label col-span-4">Name</span>
           <span className="onyx-label col-span-2">Primary muscle</span>
           <span className="onyx-label col-span-2">Equipment</span>
@@ -102,22 +102,27 @@ export default async function GlobalExerciseDbPage({
           {exs.map((e: any) => (
             <li
               key={e.id}
-              className="grid grid-cols-12 gap-4 px-6 py-3 items-center"
+              className="flex flex-col gap-2 px-4 py-3 sm:px-6 md:grid md:grid-cols-12 md:gap-4 md:items-center"
             >
-              <div className="col-span-4 text-[14px] text-onyx-bone truncate">{e.name}</div>
-              <div className="col-span-2 font-mono text-[11px] text-onyx-mute truncate">
-                {e.primary_muscle ?? "—"}
+              <div className="md:col-span-4 flex items-start justify-between gap-3">
+                <div className="text-[14px] text-onyx-bone truncate min-w-0 flex-1">{e.name}</div>
+                <div className="md:hidden shrink-0">
+                  <DeleteExerciseButton id={e.id} name={e.name} />
+                </div>
               </div>
-              <div className="col-span-2 font-mono text-[11px] text-onyx-mute truncate">
-                {e.equipment ?? "—"}
+              <div className="md:col-span-2 font-mono text-[11px] text-onyx-mute truncate">
+                <span className="md:hidden text-onyx-dim">muscle: </span>{e.primary_muscle ?? "—"}
               </div>
-              <div className="col-span-2 font-mono text-[11px] text-onyx-mute truncate">
-                {e.category ?? "—"}
+              <div className="md:col-span-2 font-mono text-[11px] text-onyx-mute truncate">
+                <span className="md:hidden text-onyx-dim">equip: </span>{e.equipment ?? "—"}
               </div>
-              <div className="col-span-1">
+              <div className="md:col-span-2 font-mono text-[11px] text-onyx-mute truncate">
+                <span className="md:hidden text-onyx-dim">cat: </span>{e.category ?? "—"}
+              </div>
+              <div className="md:col-span-1">
                 <Badge variant={e.source === "wger" ? "default" : "signal"}>{e.source}</Badge>
               </div>
-              <div className="col-span-1 text-right">
+              <div className="hidden md:block md:col-span-1 text-right">
                 <DeleteExerciseButton id={e.id} name={e.name} />
               </div>
             </li>
