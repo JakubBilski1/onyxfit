@@ -11,6 +11,7 @@
 - ALWAYS read a file before editing it
 - NEVER commit secrets, credentials, or .env files
 - NEVER add `Co-Authored-By:` trailers to commit messages (no `ruv@ruv.net`, no `claude-flow` attribution, no AI co-author lines). Commits are authored by the user only.
+- AFTER every code change that builds/typechecks cleanly, IMMEDIATELY commit AND push to the current branch — do not wait for the user to ask. Stage only files relevant to that change (skip local-only artifacts like `.swarm/`, `claude-flow.config.json`, `.mcp.json` edits, `.env*`). Use a concise imperative commit subject. Push to `origin/<current-branch>` right after the commit. If the build fails, fix it first and commit only the working state.
 
 ## File Organization
 
