@@ -599,7 +599,7 @@ function WaitlistForm({ id, className }: { id?: string; className?: string }) {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden pt-32 pb-24 md:pt-44 md:pb-32">
+    <section className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-24">
       {/* Aurora + grid + blobs */}
       <div className="pointer-events-none absolute inset-0 -z-10 onyx-aurora">
         <div className="absolute inset-0 bg-grid opacity-[0.6]" />
@@ -616,7 +616,7 @@ function Hero() {
             <Pill>Founding 100 — closed beta opening soon</Pill>
           </div>
 
-          <h1 className="mt-8 text-[clamp(56px,11vw,176px)] leading-[0.95] tracking-[-0.04em] font-semibold text-fg text-balance">
+          <h1 className="mt-6 text-[clamp(40px,6.5vw,88px)] leading-[1.02] tracking-[-0.035em] font-semibold text-fg text-balance">
             <span className="block">The console elite coaches</span>
             <span className="block">
               <span className="font-display italic font-normal text-gradient-brand">
