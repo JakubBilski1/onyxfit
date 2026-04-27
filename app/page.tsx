@@ -15,6 +15,7 @@ import {
   Layers,
   Linkedin,
   Lock,
+  Menu,
   Moon,
   Rocket,
   ScanLine,
@@ -499,9 +500,18 @@ const faqs = [
 /*                               Page Sections                                */
 /* -------------------------------------------------------------------------- */
 
+const NAV_LINKS: ReadonlyArray<readonly [string, string]> = [
+  ["Forge", "forge"],
+  ["Roster", "feature-roster"],
+  ["Nutrition", "feature-nutrition"],
+  ["Pricing", "founding"],
+  ["FAQ", "faq"],
+] as const;
+
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [authed, setAuthed] = useState<boolean | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
@@ -522,23 +532,45 @@ function Nav() {
       sub.subscription.unsubscribe();
     };
   }, []);
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDrawerOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [drawerOpen]);
+  function navigateAnchor(id: string) {
+    setDrawerOpen(false);
+    window.setTimeout(() => smoothScrollTo(id), 220);
+  }
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 h-16 bg-bg/75 backdrop-blur-xl border-b border-line transition-shadow",
+        "sticky top-0 z-40 h-16 bg-bg/75 backdrop-blur-xl border-b border-line transition-shadow pt-[env(safe-area-inset-top)]",
         scrolled && "shadow-soft",
       )}
     >
-      <div className="mx-auto flex h-full max-w-[1280px] items-center justify-between px-6 lg:px-10">
-        <BrandLockup />
+      <div className="mx-auto flex h-full max-w-[1280px] items-center justify-between px-4 sm:px-6 lg:px-10">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open navigation"
+            aria-expanded={drawerOpen}
+            className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-md text-fg-2 hover:text-fg hover:bg-fg/[.05] transition-colors -ml-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          >
+            <Menu size={20} strokeWidth={1.6} />
+          </button>
+          <BrandLockup />
+        </div>
         <nav className="hidden items-center gap-7 md:flex">
-          {[
-            ["Forge", "forge"],
-            ["Roster", "feature-roster"],
-            ["Nutrition", "feature-nutrition"],
-            ["Pricing", "founding"],
-            ["FAQ", "faq"],
-          ].map(([label, id]) => (
+          {NAV_LINKS.map(([label, id]) => (
             <button
               key={id}
               onClick={() => smoothScrollTo(id)}
@@ -588,6 +620,87 @@ function Nav() {
               Claim a seat
             </Button>
           )}
+        </div>
+      </div>
+
+      {/* Mobile drawer */}
+      <div
+        className={cn(
+          "md:hidden fixed inset-0 z-50 transition-opacity duration-200",
+          drawerOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
+        )}
+        aria-hidden={!drawerOpen}
+      >
+        <div
+          className="absolute inset-0 bg-bg/80 backdrop-blur-md"
+          onClick={() => setDrawerOpen(false)}
+        />
+        <div
+          className={cn(
+            "relative h-full w-full bg-bg border-b border-line shadow-lift flex flex-col pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] transition-transform duration-240 ease-out-expo",
+            drawerOpen ? "translate-y-0" : "-translate-y-3",
+          )}
+        >
+          <div className="flex items-center justify-between h-16 px-4 sm:px-6 border-b border-line">
+            <BrandLockup />
+            <button
+              type="button"
+              onClick={() => setDrawerOpen(false)}
+              aria-label="Close navigation"
+              className="inline-flex items-center justify-center h-10 w-10 rounded-md text-fg-2 hover:text-fg hover:bg-fg/[.05] transition-colors -mr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            >
+              <X size={20} strokeWidth={1.6} />
+            </button>
+          </div>
+          <nav className="flex-1 overflow-y-auto px-4 sm:px-6 py-6 flex flex-col gap-1">
+            {NAV_LINKS.map(([label, id]) => (
+              <button
+                key={id}
+                onClick={() => navigateAnchor(id)}
+                className="text-left text-[18px] font-semibold text-fg py-3 px-2 rounded-md hover:bg-fg/[.04] transition-colors focus-visible:outline-none focus-visible:bg-fg/[.04]"
+              >
+                {label}
+              </button>
+            ))}
+            <div className="my-4 h-px bg-line" />
+            {authed ? (
+              <a
+                href="/dashboard"
+                className="text-[15px] text-fg-2 hover:text-fg py-3 px-2 transition-colors"
+              >
+                Open dashboard →
+              </a>
+            ) : (
+              <a
+                href="/login"
+                className="text-[15px] text-fg-2 hover:text-fg py-3 px-2 transition-colors"
+              >
+                Coach login →
+              </a>
+            )}
+          </nav>
+          <div className="px-4 sm:px-6 py-4 border-t border-line">
+            {authed ? (
+              <Button
+                size="lg"
+                onClick={() => {
+                  setDrawerOpen(false);
+                  window.location.href = "/dashboard";
+                }}
+                className="w-full"
+              >
+                Go to dashboard
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                onClick={() => navigateAnchor("waitlist")}
+                className="w-full"
+              >
+                Claim a seat
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </header>

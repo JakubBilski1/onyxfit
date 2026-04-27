@@ -319,28 +319,30 @@ export default async function ClientDetailPage({
             </div>
             <Card>
               {metrics && metrics.length > 0 ? (
-                <table className="w-full">
-                  <thead className="border-b border-onyx-line">
-                    <tr className="text-left">
-                      <th className="onyx-label px-6 py-3">Date</th>
-                      <th className="onyx-label py-3">Weight</th>
-                      <th className="onyx-label py-3">BF%</th>
-                      <th className="onyx-label py-3">Sleep</th>
-                      <th className="onyx-label py-3 pr-6">Steps</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-onyx-line">
-                    {metrics.map((m: any) => (
-                      <tr key={m.recorded_at} className="font-mono text-[12px] text-onyx-bone">
-                        <td className="px-6 py-3 text-onyx-mute">{formatDate(m.recorded_at)}</td>
-                        <td className="py-3">{m.weight_kg != null ? `${m.weight_kg} kg` : "—"}</td>
-                        <td className="py-3">{m.body_fat_pct != null ? `${m.body_fat_pct}%` : "—"}</td>
-                        <td className="py-3">{m.sleep_hours != null ? `${m.sleep_hours}h` : "—"}</td>
-                        <td className="py-3 pr-6">{m.steps != null ? m.steps.toLocaleString() : "—"}</td>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="border-b border-onyx-line">
+                      <tr className="text-left">
+                        <th className="onyx-label px-4 sm:px-6 py-3">Date</th>
+                        <th className="onyx-label py-3">Weight</th>
+                        <th className="onyx-label py-3">BF%</th>
+                        <th className="onyx-label py-3 hidden sm:table-cell">Sleep</th>
+                        <th className="onyx-label py-3 pr-4 sm:pr-6 hidden sm:table-cell">Steps</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-onyx-line">
+                      {metrics.map((m: any) => (
+                        <tr key={m.recorded_at} className="font-mono text-[12px] text-onyx-bone">
+                          <td className="px-4 sm:px-6 py-3 text-onyx-mute">{formatDate(m.recorded_at)}</td>
+                          <td className="py-3">{m.weight_kg != null ? `${m.weight_kg} kg` : "—"}</td>
+                          <td className="py-3">{m.body_fat_pct != null ? `${m.body_fat_pct}%` : "—"}</td>
+                          <td className="py-3 hidden sm:table-cell">{m.sleep_hours != null ? `${m.sleep_hours}h` : "—"}</td>
+                          <td className="py-3 pr-4 sm:pr-6 hidden sm:table-cell">{m.steps != null ? m.steps.toLocaleString() : "—"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               ) : (
                 <p className="text-[13px] text-onyx-mute px-6 py-6">
                   No biomarkers logged yet. The mobile app pushes them in.

@@ -87,18 +87,23 @@ export default async function ForgePage() {
                     <li key={p.id}>
                       <Link
                         href={`/dashboard/forge/${p.id}`}
-                        className="grid grid-cols-12 gap-3 items-center py-3 px-1 hover:bg-white/[0.02]"
+                        className="flex flex-col gap-1 py-3 px-1 hover:bg-white/[0.02] md:grid md:grid-cols-12 md:gap-3 md:items-center"
                       >
-                        <div className="col-span-6 text-[14px] text-onyx-bone truncate">
-                          {p.name}
+                        <div className="md:col-span-6 flex items-center justify-between gap-3">
+                          <span className="text-[14px] text-onyx-bone truncate min-w-0 flex-1">
+                            {p.name}
+                          </span>
+                          <span className="md:hidden font-mono text-[10px] text-onyx-dim shrink-0">
+                            {formatRelative(p.updated_at)}
+                          </span>
                         </div>
-                        <div className="col-span-2 font-mono text-[11px] text-onyx-dim">
+                        <div className="md:col-span-2 font-mono text-[11px] text-onyx-dim">
                           {p.weeks}w · {p.days_per_week ?? "—"} d/wk
                         </div>
-                        <div className="col-span-2">
+                        <div className="md:col-span-2">
                           {p.goal && <Badge>{p.goal}</Badge>}
                         </div>
-                        <div className="col-span-2 font-mono text-[10px] text-onyx-dim text-right">
+                        <div className="hidden md:block md:col-span-2 font-mono text-[10px] text-onyx-dim text-right">
                           {formatRelative(p.updated_at)}
                         </div>
                       </Link>
