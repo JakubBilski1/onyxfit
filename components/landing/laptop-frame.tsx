@@ -49,8 +49,12 @@ export function LaptopFrame({
             </div>
             <span className="h-6 w-6 rounded-full bg-gradient-to-br from-primary to-violet" aria-hidden />
           </div>
-          {/* Screen */}
-          <div className="aspect-[16/10] bg-bg overflow-hidden">{children}</div>
+          {/* Screen — `relative` + absolute child guarantees the dashboard
+              fills the aspect-ratio box. `h-full` on a flex item inside
+              an aspect-ratio parent is unreliable in Chromium/WebKit. */}
+          <div className="aspect-[16/10] bg-bg overflow-hidden relative">
+            <div className="absolute inset-0">{children}</div>
+          </div>
         </div>
       </div>
       {/* Laptop base */}

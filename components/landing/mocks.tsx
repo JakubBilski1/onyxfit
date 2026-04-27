@@ -143,8 +143,11 @@ function DashShell({
   active: string;
   children: ReactNode;
 }) {
+  // absolute inset-0 inside the aspect-ratio screen box (LaptopFrame) so the
+  // dashboard reliably fills the chassis. `h-full` on a flex item inside an
+  // aspect-ratio container collapses to 0 in some browsers.
   return (
-    <div className="flex h-full bg-bg">
+    <div className="absolute inset-0 flex bg-bg">
       <MockSidebar active={active} />
       <div className="flex flex-1 flex-col overflow-hidden">
         <MockTopbar />

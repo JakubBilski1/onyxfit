@@ -1127,33 +1127,43 @@ function HowItWorks() {
 
 function Workflow() {
   return (
-    <section className="relative overflow-hidden py-32 border-t border-line">
-      <div className="pointer-events-none absolute inset-0 -z-10 onyx-aurora">
+    <section className="relative isolate overflow-hidden py-32 border-t border-line">
+      {/* Aurora backdrop — inline radial-gradient + absolutely positioned
+          blobs. We avoid the .onyx-aurora helper because its
+          `> * { position: relative }` rule clobbers absolute children. The
+          section has `isolate`, so the negative z layer stays local. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(800px_500px_at_30%_15%,rgb(var(--c-violet)/0.16),transparent_60%),radial-gradient(700px_500px_at_75%_85%,rgb(var(--c-primary)/0.16),transparent_60%)]" />
         <div className="absolute -top-32 left-1/3 w-[700px] h-[700px] rounded-full bg-violet/15 blur-[140px] motion-safe:animate-blob" />
         <div
           className="absolute -bottom-20 right-1/4 w-[500px] h-[500px] rounded-full bg-primary/15 blur-[120px] motion-safe:animate-blob"
           style={{ animationDelay: "-7s" }}
         />
       </div>
-      <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
+      <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-10">
         <SectionHead
           eyebrow="TWO SIDES. ONE FORGE."
           title="Built different for the coach. Built different for the"
           emphasis="athlete"
           align="center"
         />
-        <div className="relative mt-16 mx-auto max-w-[1200px] h-auto md:h-[680px]">
-          <div className="relative md:absolute inset-0 flex items-center justify-center">
+        {/* Laptop = normal flow child (definite size from its own content +
+            aspect-ratio). Phone = the only absolutely-positioned overlay,
+            anchored bottom-right on md+, stacked below on mobile. */}
+        <div className="relative mt-16 mx-auto max-w-[1200px]">
+          <div className="mx-auto w-full max-w-[820px]">
             <LaptopFrame
               variant="floating"
               url="/c/clients/marek"
               glow
-              className="w-full max-w-[820px]"
             >
               <MockAthlete />
             </LaptopFrame>
           </div>
-          <div className="mt-10 md:mt-0 md:absolute md:right-[8%] md:bottom-[4%]">
+          <div className="mt-10 md:mt-0 md:absolute md:right-[4%] md:bottom-[2%] md:z-20">
             <div className="md:rotate-[6deg]">
               <PhoneFrame>
                 <div className="mb-3 flex items-center justify-between">
@@ -1336,12 +1346,17 @@ function FoundingHundred() {
   return (
     <section
       id="founding"
-      className="relative py-28 md:py-40 border-t border-line"
+      className="relative isolate overflow-hidden py-28 md:py-40 border-t border-line"
     >
-      <div className="pointer-events-none absolute inset-0 -z-10">
+      {/* `isolate` keeps the -z-10 halo inside this section's stacking
+          context so it paints above <main>'s bg-bg. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      >
         <div className="absolute left-1/2 top-1/2 h-[500px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-[120px]" />
       </div>
-      <div className="mx-auto max-w-5xl px-6 lg:px-10">
+      <div className="relative z-10 mx-auto max-w-5xl px-6 lg:px-10">
         <Card className="relative overflow-hidden p-8 md:p-14">
           <div className="pointer-events-none absolute inset-0 bg-grid opacity-50" />
           <div className="relative grid gap-10 lg:grid-cols-[1.1fr_1fr]">
