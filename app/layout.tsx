@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Instrument_Serif, JetBrains_Mono, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
+import { ServiceWorkerRegister } from "@/components/pwa/sw-register";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -57,12 +58,28 @@ export const metadata: Metadata = {
     description:
       "The only platform trainers and athletes will ever need. Early access open.",
   },
+  applicationName: "Onyx Coach",
+  appleWebApp: {
+    capable: true,
+    title: "Onyx",
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: { telephone: false },
+  icons: {
+    icon: [
+      { url: "/icons/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/icons/icon.svg", type: "image/svg+xml" }],
+  },
 };
 
 export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#faf7f1" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e1016" },
   ],
 };
 
@@ -95,8 +112,9 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="bg-onyx-bg font-sans text-onyx-bone antialiased">
+      <body className="min-h-[100dvh] bg-onyx-bg font-sans text-onyx-bone antialiased">
         {children}
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

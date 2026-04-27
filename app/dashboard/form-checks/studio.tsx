@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { ScanLine } from "lucide-react";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -211,7 +213,29 @@ export function Studio({ clip }: { clip: ActiveClip | null }) {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 min-h-[440px]">
+    <>
+      {/* Mobile gate — video annotation needs a real canvas */}
+      <div className="md:hidden">
+        <div className="rounded-xl border border-onyx-line bg-onyx-card p-6 sm:p-8 text-center space-y-4">
+          <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary">
+            <ScanLine size={20} />
+          </div>
+          <h2 className="text-[18px] font-semibold text-fg">
+            Frame-by-frame review needs a bigger canvas.
+          </h2>
+          <p className="text-[13px] text-fg-2 max-w-xs mx-auto leading-relaxed">
+            Form checks rely on precise scrubbing and on-screen annotations. Open Onyx on a tablet, laptop, or larger to review this clip.
+          </p>
+          <Link
+            href="/dashboard/form-checks"
+            className="inline-flex items-center justify-center h-11 px-5 rounded-md border border-line-strong text-fg text-[14px] font-medium hover:border-primary hover:text-primary transition-colors"
+          >
+            ← Back to queue
+          </Link>
+        </div>
+      </div>
+
+      <div className="hidden md:grid grid-cols-1 lg:grid-cols-5 gap-0 min-h-[440px]">
       <div className="lg:col-span-3 bg-onyx-bg relative flex items-center justify-center border-r border-onyx-line">
         {clip?.videoUrl ? (
           <video
@@ -418,5 +442,6 @@ export function Studio({ clip }: { clip: ActiveClip | null }) {
         </div>
       </div>
     </div>
+    </>
   );
 }

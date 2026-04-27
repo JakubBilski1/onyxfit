@@ -62,7 +62,7 @@ export function KycForm() {
 
   return (
     <form onSubmit={submit} className="space-y-6">
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <Label htmlFor="legal">Legal name</Label>
           <Input id="legal" required value={legalName} onChange={(e) => setLegalName(e.target.value)} />

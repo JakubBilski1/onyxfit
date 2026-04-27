@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { Hammer } from "lucide-react";
 import { useMemo, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -337,7 +339,29 @@ export function ForgeEditor({
   // ─── render ──────────────────────────────────────────────────────────────
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
+    <>
+      {/* Mobile gate — DnD editor needs real estate */}
+      <div className="md:hidden">
+        <div className="rounded-xl border border-onyx-line bg-onyx-card p-6 sm:p-8 text-center space-y-4">
+          <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary">
+            <Hammer size={20} />
+          </div>
+          <h2 className="text-[18px] font-semibold text-fg">
+            The Forge needs more room.
+          </h2>
+          <p className="text-[13px] text-fg-2 max-w-xs mx-auto leading-relaxed">
+            Drag-drop programming is a desktop tool. Open Onyx on a tablet, laptop, or larger to edit this program.
+          </p>
+          <Link
+            href="/dashboard/forge"
+            className="inline-flex items-center justify-center h-11 px-5 rounded-md border border-line-strong text-fg text-[14px] font-medium hover:border-primary hover:text-primary transition-colors"
+          >
+            ← Back to programs
+          </Link>
+        </div>
+      </div>
+
+      <div className="hidden md:grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
       {/* ── Exercise palette ─────────────────────────────────────────────── */}
       <aside className="space-y-3">
         <div className="flex items-center justify-between">
@@ -525,6 +549,7 @@ export function ForgeEditor({
         )}
       </div>
     </div>
+    </>
   );
 }
 
