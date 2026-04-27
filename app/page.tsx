@@ -47,6 +47,7 @@ import {
   MockNutrition,
   MockTriage,
 } from "@/components/landing/mocks";
+import { getSupabaseBrowser } from "@/lib/supabase/client";
 
 /* -------------------------------------------------------------------------- */
 /*                                  Utilities                                 */
@@ -500,11 +501,26 @@ const faqs = [
 
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
+  const [authed, setAuthed] = useState<boolean | null>(null);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    const supabase = getSupabaseBrowser();
+    let alive = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (alive) setAuthed(!!data.session);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthed(!!session);
+    });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      alive = false;
+      sub.subscription.unsubscribe();
+    };
   }, []);
   return (
     <header
@@ -541,15 +557,37 @@ function Nav() {
             In the forge
           </span>
           <ThemeToggle />
-          <a
-            href="/login"
-            className="hidden md:inline-flex items-center text-sm text-fg-2 hover:text-fg transition-colors px-3 focus-visible:outline-none focus-visible:text-fg"
-          >
-            Coach login →
-          </a>
-          <Button size="sm" onClick={() => smoothScrollTo("waitlist")}>
-            Claim a seat
-          </Button>
+          {authed === null ? (
+            <span
+              aria-hidden
+              className="hidden md:inline-flex items-center text-sm px-3 opacity-0"
+            >
+              Coach login →
+            </span>
+          ) : authed ? (
+            <a
+              href="/dashboard"
+              className="hidden md:inline-flex items-center text-sm text-fg-2 hover:text-fg transition-colors px-3 focus-visible:outline-none focus-visible:text-fg"
+            >
+              Open dashboard →
+            </a>
+          ) : (
+            <a
+              href="/login"
+              className="hidden md:inline-flex items-center text-sm text-fg-2 hover:text-fg transition-colors px-3 focus-visible:outline-none focus-visible:text-fg"
+            >
+              Coach login →
+            </a>
+          )}
+          {authed ? (
+            <Button size="sm" onClick={() => (window.location.href = "/dashboard")}>
+              Go to dashboard
+            </Button>
+          ) : (
+            <Button size="sm" onClick={() => smoothScrollTo("waitlist")}>
+              Claim a seat
+            </Button>
+          )}
         </div>
       </div>
     </header>
