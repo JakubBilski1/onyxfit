@@ -8,7 +8,7 @@ import { Card, CardHeader, CardTitle, CardBody } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/onyx/empty-state";
-import { formatCurrencyCents, formatDate, formatRelative } from "@/lib/utils";
+import { cn, formatCurrencyCents, formatDate, formatRelative } from "@/lib/utils";
 import { ClientLinkForm } from "./client-link-form";
 import { DangerZone } from "./danger-zone";
 import { ResolveFlagButton } from "./resolve-flag-button";
@@ -371,16 +371,60 @@ export default async function ClientDetailPage({
                     : <span className="text-onyx-dim">Not signed</span>}
                 </div>
               </div>
-              {client.injury_history && (
-                <div>
-                  <span className="onyx-label">Injury history</span>
-                  <p className="mt-1 text-[13px] text-onyx-mute whitespace-pre-wrap">
-                    {typeof client.injury_history === "string"
-                      ? client.injury_history
-                      : JSON.stringify(client.injury_history, null, 2)}
-                  </p>
-                </div>
-              )}
+              {(() => {
+                const ih = client.injury_history;
+                if (!ih) return null;
+                if (typeof ih === "string") {
+                  return (
+                    <div>
+                      <span className="onyx-label">Injury history</span>
+                      <p className="mt-1 text-[13px] text-onyx-mute whitespace-pre-wrap">{ih}</p>
+                    </div>
+                  );
+                }
+                const items = Array.isArray(ih) ? ih : [];
+                if (items.length === 0) return null;
+                const SEV_TONE: Record<string, string> = {
+                  low: "bg-emerald/10 text-emerald border-emerald/30",
+                  medium: "bg-onyx-amber/10 text-onyx-amber border-onyx-amber/30",
+                  high: "bg-rose/10 text-rose border-rose/30",
+                };
+                return (
+                  <div>
+                    <span className="onyx-label">Injury history</span>
+                    <ul className="mt-2 space-y-2">
+                      {items.map((it: any, i: number) => {
+                        const area = String(it?.area ?? "—");
+                        const severity = String(it?.severity ?? "").toLowerCase();
+                        const note = it?.note ? String(it.note) : null;
+                        return (
+                          <li
+                            key={i}
+                            className="rounded-md border border-onyx-line bg-onyx-bg/40 px-3 py-2"
+                          >
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-[13px] font-medium text-onyx-bone capitalize">{area}</span>
+                              {severity && (
+                                <span
+                                  className={cn(
+                                    "text-[10px] font-mono uppercase tracking-[0.18em] px-1.5 py-0.5 rounded border",
+                                    SEV_TONE[severity] ?? "bg-onyx-card text-onyx-mute border-onyx-line",
+                                  )}
+                                >
+                                  {severity}
+                                </span>
+                              )}
+                            </div>
+                            {note && (
+                              <p className="mt-1 text-[12px] text-onyx-mute leading-snug">{note}</p>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                );
+              })()}
             </CardBody>
           </Card>
 
