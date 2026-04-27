@@ -43,8 +43,14 @@ export default async function ProgramDetailPage({
 
   if (!program) notFound();
 
-  const initial =
-    (program.metadata as ProgramStructure | null) ?? EMPTY_STRUCTURE;
+  // metadata is freeform jsonb — only treat it as a ProgramStructure when it
+  // actually has the weeks array shape. Anything else (legacy tags-only blobs,
+  // null) falls back to EMPTY_STRUCTURE so the editor stays mountable.
+  const meta = program.metadata as Record<string, unknown> | null;
+  const initial: ProgramStructure =
+    meta && Array.isArray((meta as { weeks?: unknown }).weeks)
+      ? (meta as unknown as ProgramStructure)
+      : EMPTY_STRUCTURE;
   const exList = (exercises ?? []) as ExerciseLite[];
   const clientList = (links ?? [])
     .map((l: any) => {
