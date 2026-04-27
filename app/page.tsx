@@ -602,11 +602,15 @@ function Hero() {
     <section className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-24">
       {/* Aurora + grid + blobs */}
       <div className="pointer-events-none absolute inset-0 -z-10 onyx-aurora">
-        <div className="absolute inset-0 bg-grid opacity-[0.6]" />
-        <div className="absolute -top-32 left-1/4 w-[800px] h-[800px] rounded-full bg-primary/15 blur-[140px] motion-safe:animate-blob" />
+        <div className="absolute inset-0 bg-grid opacity-100" />
+        <div className="absolute -top-24 left-[12%] h-[560px] w-[560px] rounded-full bg-primary/45 blur-[110px] motion-safe:animate-blob" />
         <div
-          className="absolute -top-20 right-1/4 w-[600px] h-[600px] rounded-full bg-violet/15 blur-[120px] motion-safe:animate-blob"
+          className="absolute -top-16 right-[10%] h-[520px] w-[520px] rounded-full bg-violet/45 blur-[100px] motion-safe:animate-blob"
           style={{ animationDelay: "-6s" }}
+        />
+        <div
+          className="absolute top-[40%] left-1/2 -translate-x-1/2 h-[420px] w-[820px] rounded-full bg-primary/20 blur-[120px] motion-safe:animate-blob"
+          style={{ animationDelay: "-12s" }}
         />
       </div>
 
