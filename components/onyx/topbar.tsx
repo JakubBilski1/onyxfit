@@ -3,6 +3,7 @@ import { getSupabaseServer } from "@/lib/supabase/server";
 import { CommandPalette } from "./command-palette";
 import { ThemeToggle } from "./theme-toggle";
 import { NotificationsBell } from "./notifications-bell";
+import { MobileNav } from "./mobile-nav";
 import { ArrowUpRight } from "lucide-react";
 
 export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
@@ -14,6 +15,7 @@ export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
   let clients: { id: string; full_name: string }[] = [];
   let initialBroadcasts: any[] = [];
   let initialFlags: any[] = [];
+  let profileForNav: { name: string; email: string } | null = null;
 
   if (user) {
     // Audience filter for the bell — coach sees broadcasts targeted at them,
@@ -30,8 +32,14 @@ export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
       .order("sent_at", { ascending: false })
       .limit(10);
 
+    const profileQ = supabase
+      .from("profiles")
+      .select("full_name, email")
+      .eq("id", user.id)
+      .maybeSingle();
+
     if (scope === "coach") {
-      const [{ data: links }, { data: broadcasts }, { data: flags }] =
+      const [{ data: links }, { data: broadcasts }, { data: flags }, { data: profile }] =
         await Promise.all([
           supabase
             .from("coaches_clients")
@@ -50,6 +58,7 @@ export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
             .eq("resolved", false)
             .order("created_at", { ascending: false })
             .limit(10),
+          profileQ,
         ]);
       clients = (links ?? [])
         .map((l: any) => (Array.isArray(l.client) ? l.client[0] : l.client))
@@ -63,9 +72,18 @@ export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
         created_at: f.created_at,
         client_name: f.client?.full_name ?? null,
       }));
+      profileForNav = profile
+        ? { name: profile.full_name ?? "Coach", email: profile.email ?? "" }
+        : null;
     } else {
-      const { data: broadcasts } = await broadcastsQ;
+      const [{ data: broadcasts }, { data: profile }] = await Promise.all([
+        broadcastsQ,
+        profileQ,
+      ]);
       initialBroadcasts = broadcasts ?? [];
+      profileForNav = profile
+        ? { name: profile.full_name ?? "Admin", email: profile.email ?? "" }
+        : null;
     }
   }
 
@@ -78,8 +96,9 @@ export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
   const bellScope = scope === "coach" ? "active_coach" : "admin";
 
   return (
-    <header className="h-16 border-b border-line flex items-center justify-between px-6 lg:px-8 sticky top-0 z-30 bg-bg/85 backdrop-blur-xl">
-      <div className="flex items-center gap-5">
+    <header className="h-16 border-b border-line flex items-center justify-between px-4 sm:px-6 lg:px-8 sticky top-0 z-30 bg-bg/85 backdrop-blur-xl pt-[env(safe-area-inset-top)]">
+      <div className="flex items-center gap-3 sm:gap-5">
+        <MobileNav scope={scope} user={profileForNav} />
         <div className="hidden md:flex items-center gap-2.5 text-fg-2 text-[13px]">
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full rounded-full bg-emerald opacity-60 animate-ping" />

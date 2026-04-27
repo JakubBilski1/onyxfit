@@ -2,80 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  ActivitySquare,
-  Users,
-  Hammer,
-  Apple,
-  HeartPulse,
-  Vault,
-  ScanLine,
-  CircleUserRound,
-  Building2,
-  ShieldCheck,
-  Banknote,
-  Megaphone,
-  Library,
-  Plus,
-  LogOut,
-  Sparkles,
-  type LucideIcon,
-} from "lucide-react";
+import { LogOut, Plus, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-type NavItem = { href: string; label: string; icon: LucideIcon };
-type NavGroup = { label: string; items: NavItem[] };
-
-const COACH_GROUPS: NavGroup[] = [
-  {
-    label: "Today",
-    items: [{ href: "/dashboard", label: "Triage", icon: ActivitySquare }],
-  },
-  {
-    label: "Athletes",
-    items: [
-      { href: "/dashboard/clients", label: "Clients", icon: Users },
-      { href: "/dashboard/form-checks", label: "Form Studio", icon: ScanLine },
-    ],
-  },
-  {
-    label: "Programming",
-    items: [
-      { href: "/dashboard/forge", label: "The Forge", icon: Hammer },
-      { href: "/dashboard/nutrition", label: "Nutrition", icon: Apple },
-      { href: "/dashboard/recovery", label: "Recovery", icon: HeartPulse },
-    ],
-  },
-  {
-    label: "Library",
-    items: [
-      { href: "/dashboard/vault", label: "Vault", icon: Vault },
-      { href: "/dashboard/profile", label: "Storefront", icon: CircleUserRound },
-    ],
-  },
-];
-
-const ADMIN_GROUPS: NavGroup[] = [
-  {
-    label: "Overview",
-    items: [{ href: "/admin", label: "Command Center", icon: Building2 }],
-  },
-  {
-    label: "Coaches",
-    items: [
-      { href: "/admin/kyc", label: "Verification", icon: ShieldCheck },
-      { href: "/admin/coaches", label: "Coaches", icon: Users },
-    ],
-  },
-  {
-    label: "Platform",
-    items: [
-      { href: "/admin/disputes", label: "Disputes", icon: Banknote },
-      { href: "/admin/exercises", label: "Global DB", icon: Library },
-      { href: "/admin/broadcasts", label: "Broadcast", icon: Megaphone },
-    ],
-  },
-];
+import { ADMIN_GROUPS, COACH_GROUPS, isNavActive } from "./nav-data";
 
 export function Sidebar({
   scope,
@@ -86,10 +15,6 @@ export function Sidebar({
 }) {
   const path = usePathname();
   const groups = scope === "admin" ? ADMIN_GROUPS : COACH_GROUPS;
-  const isActive = (href: string) =>
-    href === "/dashboard" || href === "/admin"
-      ? path === href
-      : path.startsWith(href);
 
   return (
     <aside className="hidden lg:flex flex-col w-[260px] shrink-0 border-r border-line bg-surface">
@@ -126,7 +51,7 @@ export function Sidebar({
                   key={it.href}
                   href={it.href}
                   className="onyx-nav-item"
-                  data-active={isActive(it.href)}
+                  data-active={isNavActive(path, it.href)}
                 >
                   <Icon size={16} strokeWidth={1.6} />
                   <span>{it.label}</span>
