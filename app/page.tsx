@@ -599,22 +599,36 @@ function WaitlistForm({ id, className }: { id?: string; className?: string }) {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-24">
-      {/* Aurora + grid + blobs */}
-      <div className="pointer-events-none absolute inset-0 -z-10 onyx-aurora">
-        <div className="absolute inset-0 bg-grid opacity-100" />
-        <div className="absolute -top-24 left-[12%] h-[560px] w-[560px] rounded-full bg-primary/45 blur-[110px] motion-safe:animate-blob" />
+    <section className="relative isolate overflow-hidden pt-12 pb-20 md:pt-20 md:pb-24">
+      {/* Aurora + grid + blobs.
+          NOTE: section has `isolate` so the negative z layer below stays
+          local to this stacking context and is not painted behind <main>'s
+          bg-bg. We avoid the .onyx-aurora helper because its
+          `> * { position: relative }` rule breaks absolute-positioned
+          children (the blobs collapse into inline flow). */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      >
+        {/* Soft aurora gradient backdrop — primary at top-left, violet at top-right */}
+        <div className="absolute inset-0 bg-[radial-gradient(900px_500px_at_15%_0%,rgb(var(--c-primary)/0.18),transparent_60%),radial-gradient(900px_500px_at_85%_0%,rgb(var(--c-violet)/0.18),transparent_60%)]" />
+
+        {/* Faint grid texture */}
+        <div className="absolute inset-0 bg-grid opacity-70" />
+
+        {/* Drifting blobs */}
+        <div className="absolute -top-24 left-[12%] h-[560px] w-[560px] rounded-full bg-primary/40 blur-[110px] motion-safe:animate-blob" />
         <div
-          className="absolute -top-16 right-[10%] h-[520px] w-[520px] rounded-full bg-violet/45 blur-[100px] motion-safe:animate-blob"
+          className="absolute -top-16 right-[10%] h-[520px] w-[520px] rounded-full bg-violet/40 blur-[100px] motion-safe:animate-blob"
           style={{ animationDelay: "-6s" }}
         />
         <div
-          className="absolute top-[40%] left-1/2 -translate-x-1/2 h-[420px] w-[820px] rounded-full bg-primary/20 blur-[120px] motion-safe:animate-blob"
+          className="absolute top-[38%] left-1/2 -translate-x-1/2 h-[420px] w-[820px] rounded-full bg-primary/20 blur-[120px] motion-safe:animate-blob"
           style={{ animationDelay: "-12s" }}
         />
       </div>
 
-      <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
+      <div className="relative z-10 mx-auto max-w-[1280px] px-6 lg:px-10">
         <div className="mx-auto max-w-5xl text-center">
           <div className="inline-flex">
             <Pill>Founding 100 — closed beta opening soon</Pill>
