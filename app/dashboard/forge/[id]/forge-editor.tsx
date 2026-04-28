@@ -925,7 +925,7 @@ function WeekCanvas({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
         {week.days.map((d) => (
           <DayCard
             key={d.id}
@@ -960,7 +960,7 @@ function WeekCanvas({
         <button
           type="button"
           onClick={onAddDay}
-          className="rounded-lg border border-dashed border-line min-h-[200px] flex items-center justify-center gap-2 text-fg-2 hover:border-primary hover:text-primary hover:bg-primary/[.04] transition-colors"
+          className="rounded-lg border border-dashed border-line min-h-[240px] flex items-center justify-center gap-2 text-fg-2 hover:border-primary hover:text-primary hover:bg-primary/[.04] transition-colors"
         >
           <Plus size={20} /> Add day
         </button>
@@ -1290,7 +1290,7 @@ function RowCard({
   }
 
   return (
-    <li className="rounded-md bg-card-2 p-2.5 group">
+    <li className="rounded-md bg-card-2 p-2.5 group ring-1 ring-line/60">
       <div className="flex items-start gap-2">
         <div
           draggable
@@ -1327,7 +1327,7 @@ function RowCard({
         </button>
       </div>
 
-      <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 pl-9">
+      <div className="mt-3 grid grid-cols-2 2xl:grid-cols-4 gap-2.5 pl-9">
         <SetsStepper
           value={row.sets}
           onChange={(v) => onUpdate({ sets: Math.max(1, Math.min(100, v)) })}
@@ -1362,8 +1362,8 @@ function RowCard({
 }
 
 const FIELD_INPUT =
-  "h-9 rounded-md border border-line bg-card-2 px-2 text-[13px] text-fg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20";
-const FIELD_LABEL = "text-[11.5px] font-medium text-fg-2";
+  "h-10 w-full rounded-md border border-line bg-card-2 px-2.5 text-[13.5px] font-medium text-fg focus:outline-none focus:border-primary/80 focus:ring-2 focus:ring-primary/30 transition-colors";
+const FIELD_LABEL = "text-[12px] font-medium uppercase tracking-[.06em] text-fg-2";
 
 function SetsStepper({
   value,
@@ -1375,11 +1375,11 @@ function SetsStepper({
   return (
     <label className="flex flex-col gap-1">
       <span className={FIELD_LABEL}>Sets</span>
-      <div className="flex">
+      <div className="flex min-w-[140px]">
         <button
           type="button"
           onClick={() => onChange(Math.max(1, value - 1))}
-          className="h-9 w-7 rounded-l-md border border-line border-r-0 bg-card-2 text-fg-2 hover:text-fg hover:bg-card text-[13px]"
+          className="h-10 w-9 rounded-l-md border border-line border-r-0 bg-card-2 text-fg-2 hover:text-fg hover:bg-fg/[.06] text-[13px]"
           aria-label="Decrease sets"
         >
           −
@@ -1388,12 +1388,12 @@ function SetsStepper({
           type="number"
           value={value}
           onChange={(e) => onChange(Number(e.target.value) || 1)}
-          className="h-9 w-full min-w-0 border-y border-line bg-card-2 px-1 text-center text-[13px] text-fg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          className="h-10 w-full min-w-0 border-y border-line bg-card-2 px-1 text-center text-[13.5px] font-medium text-fg focus:outline-none focus:border-primary/80 focus:ring-2 focus:ring-primary/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
         <button
           type="button"
           onClick={() => onChange(Math.min(100, value + 1))}
-          className="h-9 w-7 rounded-r-md border border-line border-l-0 bg-card-2 text-fg-2 hover:text-fg hover:bg-card text-[13px]"
+          className="h-10 w-9 rounded-r-md border border-line border-l-0 bg-card-2 text-fg-2 hover:text-fg hover:bg-fg/[.06] text-[13px]"
           aria-label="Increase sets"
         >
           +
@@ -1500,9 +1500,9 @@ function RestStepper({
           onChange={(e) =>
             onChange(Math.max(0, Number(e.target.value) || 0))
           }
-          className={`${FIELD_INPUT} w-full pr-6`}
+          className={`${FIELD_INPUT} pl-2.5 pr-7`}
         />
-        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[12px] text-fg-3 pointer-events-none">
+        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[12px] text-fg-3 pointer-events-none">
           s
         </span>
       </div>
