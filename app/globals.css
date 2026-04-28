@@ -14,8 +14,8 @@
     /* Surfaces — warm slate, not pitch black */
     --c-bg:           14 16 22;        /* page background */
     --c-surface:      22 25 34;        /* sidebar / topbar */
-    --c-card:         28 32 46;        /* elevated cards */
-    --c-card-2:       35 40 56;        /* hover / highlighted */
+    --c-card:         22 25 34;        /* elevated cards — match sidebar */
+    --c-card-2:       30 34 46;        /* hover / highlighted */
     --c-line:         55  60  78;
     --c-line-strong:  85  92 116;
 
