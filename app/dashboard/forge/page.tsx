@@ -55,7 +55,7 @@ export default async function ForgePage() {
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>+ New program</CardTitle>
+            <CardTitle>New program</CardTitle>
           </CardHeader>
           <CardBody>
             <NewProgramForm />
@@ -63,7 +63,7 @@ export default async function ForgePage() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>+ New template</CardTitle>
+            <CardTitle>New template</CardTitle>
           </CardHeader>
           <CardBody>
             <NewProgramForm template />
