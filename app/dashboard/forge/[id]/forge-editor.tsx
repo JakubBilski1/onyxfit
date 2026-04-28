@@ -925,7 +925,7 @@ function WeekCanvas({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {week.days.map((d) => (
           <DayCard
             key={d.id}
@@ -1327,7 +1327,7 @@ function RowCard({
         </button>
       </div>
 
-      <div className="mt-3 grid grid-cols-2 2xl:grid-cols-4 gap-2.5 pl-9">
+      <div className="mt-3 grid grid-cols-2 gap-2.5 pl-9">
         <SetsStepper
           value={row.sets}
           onChange={(v) => onUpdate({ sets: Math.max(1, Math.min(100, v)) })}
