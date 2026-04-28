@@ -4,6 +4,7 @@ import { useRef, useState, useTransition } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import {
   addCompound,
   deleteCompound,
@@ -29,17 +30,14 @@ export function CompoundForm({ clientId }: { clientId: string }) {
     null,
   );
 
-  if (!open) {
-    return (
+  return (
+    <>
       <Button type="button" variant="ghost" size="sm" onClick={() => setOpen(true)}>
         + Compound
       </Button>
-    );
-  }
-
-  return (
-    <form ref={formRef} action={formAction} className="space-y-3 border border-onyx-line p-4 mt-3">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <Modal open={open} onClose={() => setOpen(false)} title="Add compound" size="lg">
+        <form ref={formRef} action={formAction} className="space-y-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div className="md:col-span-2">
           <Label htmlFor="comp-name">Name *</Label>
           <Input id="comp-name" name="name" required maxLength={200} placeholder="Creatine monohydrate" />
@@ -61,16 +59,18 @@ export function CompoundForm({ clientId }: { clientId: string }) {
           <Label htmlFor="comp-food" className="!mb-0">With food</Label>
         </div>
       </div>
-      {state && !state.ok && (
-        <p className="text-[11px] font-mono text-onyx-red">{state.error}</p>
-      )}
-      <div className="flex gap-2">
-        <Submit />
-        <Button type="button" variant="ghost" size="sm" onClick={() => setOpen(false)}>
-          Cancel
-        </Button>
-      </div>
-    </form>
+          {state && !state.ok && (
+            <p className="text-[11px] font-mono text-onyx-red">{state.error}</p>
+          )}
+          <div className="flex gap-2">
+            <Submit />
+            <Button type="button" variant="ghost" size="sm" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Modal>
+    </>
   );
 }
 

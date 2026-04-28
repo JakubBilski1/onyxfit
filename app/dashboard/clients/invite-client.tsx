@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import { inviteClient, type InviteResult } from "./actions";
 
 export function InviteClient({
@@ -29,8 +30,8 @@ export function InviteClient({
     null,
   );
 
-  if (!open) {
-    return (
+  return (
+    <>
       <Button
         type="button"
         variant={variant}
@@ -39,22 +40,8 @@ export function InviteClient({
       >
         {label}
       </Button>
-    );
-  }
-
-  return (
-    <div className="onyx-card p-6 w-full max-w-xl">
-      <div className="flex items-center justify-between mb-4">
-        <span className="onyx-label">Invite athlete</span>
-        <button
-          type="button"
-          onClick={() => setOpen(false)}
-          className="text-[10px] font-mono text-onyx-dim hover:text-onyx-bone"
-        >
-          CANCEL
-        </button>
-      </div>
-      <form ref={formRef} action={action} className="space-y-4">
+      <Modal open={open} onClose={() => setOpen(false)} title="Invite athlete">
+        <form ref={formRef} action={action} className="space-y-4">
         <div>
           <Label htmlFor="invite-name">Full name *</Label>
           <Input
@@ -135,8 +122,9 @@ export function InviteClient({
             Cancel
           </Button>
         </div>
-      </form>
-    </div>
+        </form>
+      </Modal>
+    </>
   );
 }
 

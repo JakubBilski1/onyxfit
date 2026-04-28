@@ -43,8 +43,7 @@ export default async function ClientsPage() {
       {rows.length === 0 ? (
         <EmptyState
           title="No clients yet."
-          description="Invite your first athlete and the roster will populate. They'll receive an onboarding link with the medical questionnaire, injury history, and consent forms."
-          action={<InviteClient label="+ Invite athlete" />}
+          description="Invite your first athlete using the button above. They'll receive an onboarding link with the medical questionnaire, injury history, and consent forms."
         />
       ) : (
         <Card>

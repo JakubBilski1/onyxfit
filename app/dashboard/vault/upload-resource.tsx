@@ -4,6 +4,7 @@ import { useRef, useState, useTransition } from "react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import { createResource, deleteResource } from "./actions";
 
 const ACCEPT = ".pdf,.doc,.docx,.png,.jpg,.jpeg,.webp,.mp4,.mov";
@@ -60,32 +61,14 @@ export function UploadResource({ userId }: { userId: string }) {
     });
   }
 
-  if (!open) {
-    return (
+  return (
+    <>
       <Button type="button" variant="ghost" size="sm" onClick={() => setOpen(true)}>
         + Upload
       </Button>
-    );
-  }
-
-  return (
-    <form
-      ref={formRef}
-      action={submit}
-      className="space-y-3 border border-onyx-line p-4 mt-3 max-w-xl"
-    >
-      <div className="flex items-center justify-between">
-        <span className="onyx-label">Add resource</span>
-        <button
-          type="button"
-          onClick={() => setOpen(false)}
-          className="text-[10px] font-mono text-onyx-dim hover:text-onyx-bone"
-        >
-          CANCEL
-        </button>
-      </div>
-
-      <div>
+      <Modal open={open} onClose={() => setOpen(false)} title="Add resource">
+        <form ref={formRef} action={submit} className="space-y-3">
+          <div>
         <Label htmlFor="rf-title">Title *</Label>
         <Input id="rf-title" name="title" required maxLength={200} />
       </div>
@@ -163,17 +146,19 @@ export function UploadResource({ userId }: { userId: string }) {
         )}
       </div>
 
-      {error && <p className="text-[11px] font-mono text-onyx-red">{error}</p>}
+          {error && <p className="text-[11px] font-mono text-onyx-red">{error}</p>}
 
-      <div className="flex gap-2">
-        <Button type="submit" variant="signal" size="sm" disabled={busy}>
-          {busy ? "Saving…" : "Save resource"}
-        </Button>
-        <Button type="button" variant="ghost" size="sm" onClick={() => setOpen(false)}>
-          Cancel
-        </Button>
-      </div>
-    </form>
+          <div className="flex gap-2">
+            <Button type="submit" variant="signal" size="sm" disabled={busy}>
+              {busy ? "Saving…" : "Save resource"}
+            </Button>
+            <Button type="button" variant="ghost" size="sm" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Modal>
+    </>
   );
 }
 

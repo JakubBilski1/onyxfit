@@ -4,6 +4,7 @@ import { useRef, useState, useTransition } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import {
   addCardioBlock,
   deleteCardioBlock,
@@ -34,17 +35,14 @@ export function CardioBlockForm({ clientId }: { clientId: string }) {
     null,
   );
 
-  if (!open) {
-    return (
+  return (
+    <>
       <Button type="button" variant="ghost" size="sm" onClick={() => setOpen(true)}>
         + Block
       </Button>
-    );
-  }
-
-  return (
-    <form ref={formRef} action={formAction} className="space-y-3 border border-onyx-line p-4 mt-3">
-      <input type="hidden" name="kind" value={kind} />
+      <Modal open={open} onClose={() => setOpen(false)} title="Add cardio block" size="lg">
+        <form ref={formRef} action={formAction} className="space-y-3">
+          <input type="hidden" name="kind" value={kind} />
       <div className="flex flex-wrap gap-2">
         {KINDS.map((k) => (
           <button
@@ -87,16 +85,18 @@ export function CardioBlockForm({ clientId }: { clientId: string }) {
         <Label htmlFor="cardio-notes">Notes</Label>
         <Textarea id="cardio-notes" name="notes" rows={2} maxLength={2000} />
       </div>
-      {state && !state.ok && (
-        <p className="text-[11px] font-mono text-onyx-red">{state.error}</p>
-      )}
-      <div className="flex gap-2">
-        <Submit />
-        <Button type="button" variant="ghost" size="sm" onClick={() => setOpen(false)}>
-          Cancel
-        </Button>
-      </div>
-    </form>
+          {state && !state.ok && (
+            <p className="text-[11px] font-mono text-onyx-red">{state.error}</p>
+          )}
+          <div className="flex gap-2">
+            <Submit />
+            <Button type="button" variant="ghost" size="sm" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Modal>
+    </>
   );
 }
 
