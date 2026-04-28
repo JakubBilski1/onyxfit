@@ -1,10 +1,8 @@
-import Link from "next/link";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { CommandPalette } from "./command-palette";
 import { ThemeToggle } from "./theme-toggle";
 import { NotificationsBell } from "./notifications-bell";
 import { MobileNav } from "./mobile-nav";
-import { ArrowUpRight } from "lucide-react";
 
 export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
   const supabase = getSupabaseServer();
@@ -118,14 +116,6 @@ export async function Topbar({ scope }: { scope: "coach" | "admin" }) {
         />
 
         <ThemeToggle />
-
-        <Link
-          href={scope === "admin" ? "/dashboard" : "/admin"}
-          className="hidden md:inline-flex items-center gap-1.5 text-[12px] font-medium text-fg-2 hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-fg/[.04]"
-        >
-          {scope === "admin" ? "Coach view" : "Admin"}
-          <ArrowUpRight size={13} strokeWidth={1.8} />
-        </Link>
       </div>
     </header>
   );
