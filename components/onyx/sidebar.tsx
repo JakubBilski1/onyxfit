@@ -19,7 +19,7 @@ export function Sidebar({
   return (
     <aside className="hidden lg:flex flex-col w-[260px] shrink-0 border-r border-line bg-surface">
       {/* Brand */}
-      <div className="px-6 pt-7 pb-6 border-b border-line">
+      <div className="h-16 px-6 flex items-center border-b border-line">
         <Link href="/" className="flex items-center gap-3 group">
           <span className="relative inline-flex items-center justify-center h-9 w-9 rounded-lg bg-gradient-to-br from-primary to-violet shadow-soft group-hover:shadow-glow-primary transition-shadow duration-300">
             <Sparkles size={16} strokeWidth={2} className="text-primary-fg" />
