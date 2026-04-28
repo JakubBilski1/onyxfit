@@ -1,11 +1,69 @@
 "use server";
 
+import { randomInt } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { requireActiveCoach } from "@/lib/auth";
 
 export type InviteResult =
   | { ok: true; clientId: string }
   | { ok: false; error: string };
+
+export type InviteCodeResult =
+  | { ok: true; code: string; expiresAt: string }
+  | { ok: false; error: string };
+
+// Crockford-ish alphabet — no 0/O/1/I/L to avoid manual-entry mistakes.
+const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+const CODE_LENGTH = 10;
+const INVITE_TTL_DAYS = 7;
+
+function makeCode(): string {
+  let out = "";
+  for (let i = 0; i < CODE_LENGTH; i++) {
+    out += CODE_ALPHABET[randomInt(CODE_ALPHABET.length)];
+  }
+  return out;
+}
+
+export async function generateInviteCode(
+  rawEmail?: string,
+): Promise<InviteCodeResult> {
+  const { supabase, user } = await requireActiveCoach();
+
+  const email = (rawEmail ?? "").trim().toLowerCase();
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { ok: false, error: "Invalid email." };
+  }
+
+  const expiresAt = new Date(
+    Date.now() + INVITE_TTL_DAYS * 24 * 60 * 60 * 1000,
+  ).toISOString();
+
+  // Retry on the (vanishingly unlikely) chance of a code collision.
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const code = makeCode();
+    const { data, error } = await supabase
+      .from("client_invites")
+      .insert({
+        code,
+        coach_id: user.id,
+        email: email || null,
+        expires_at: expiresAt,
+      })
+      .select("code, expires_at")
+      .single();
+
+    if (!error && data) {
+      revalidatePath("/dashboard/clients");
+      return { ok: true, code: data.code, expiresAt: data.expires_at };
+    }
+    // 23505 = unique_violation — retry with a new code.
+    if (error && (error as { code?: string }).code !== "23505") {
+      return { ok: false, error: error.message };
+    }
+  }
+  return { ok: false, error: "Could not allocate a unique code. Try again." };
+}
 
 export async function inviteClient(
   _prev: InviteResult | null,
